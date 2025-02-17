@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class DailyTotal {
   final DateTime date;
   final int totalRepetitions;
@@ -9,7 +7,7 @@ class DailyTotal {
     required this.totalRepetitions,
   });
 
-  String get formattedDate => '${date.day.toString().padLeft(2, '0')}';
+  String get formattedDate => date.day.toString().padLeft(2, '0');
 
   Map<String, dynamic> toJson() => {
     'date': date.toIso8601String(),

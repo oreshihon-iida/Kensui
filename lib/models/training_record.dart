@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class TrainingRecord {
   final DateTime timestamp;
   final int repetitions;
