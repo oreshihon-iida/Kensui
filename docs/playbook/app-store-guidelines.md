@@ -2,6 +2,10 @@
 
 このプレイブックでは、iOSとAndroidアプリの配布に関する重要なガイドラインと要件をまとめています。
 
+参考URL:
+- iOS App Store レビューガイドライン: https://developer.apple.com/jp/app-store/review/guidelines/
+- Google Play デベロッパー配布契約: https://play.google/intl/ALL_jp/developer-distribution-agreement.html
+
 ## iOS App Store レビューガイドライン
 
 ### 1. 安全性
