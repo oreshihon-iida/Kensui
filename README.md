@@ -1,81 +1,133 @@
-# 懸垂 (Kensui)
+# Kensui (懸垂カウンター)
 
-シンプルな懸垂記録アプリケーションです。日々の懸垂運動を記録し、視覚化することができます。
+懸垂の回数を記録するアプリケーション
 
-## 主な機能
+## 機能
 - 懸垂回数の記録
-- 折れ線グラフによる日別進捗の表示
-- トレーニング履歴のローカル保存
+- 日別グラフ表示
+- ローカルストレージでのデータ保存
 
-## 技術スタック
-- Flutter/Dart
-- SharedPreferences（ローカルストレージ）
-- fl_chart（データ可視化）
-- Material Design（UIコンポーネント）
+## 環境構築手順
 
-## 開発環境のセットアップ
+### 必要な環境
+- Flutter SDK
+- Android Studio または Visual Studio Code
+- Android SDK
+- エミュレータまたは実機デバイス
 
-### Windowsでの環境構築
+### Windows
 
 1. Flutter SDKのインストール
-   - [Flutter公式サイト](https://docs.flutter.dev/get-started/install/windows)からFlutter SDKをダウンロード
-   - ダウンロードしたzipファイルを任意のフォルダに展開（例：`C:\src\flutter`）
-   - 環境変数のPathに展開したフォルダの`bin`ディレクトリを追加
+   - [Flutter公式サイト](https://flutter.dev/docs/get-started/install/windows)からSDKをダウンロード
+   - 環境変数の設定
+   - `flutter doctor`で環境チェック
 
-2. 開発ツールのインストール
-   - [Git for Windows](https://git-scm.com/download/win)をインストール
-   - [Visual Studio Code](https://code.visualstudio.com/)をインストール
-   - VSCodeでFlutter拡張機能をインストール
+2. Android Studioのインストール
+   - [Android Studio](https://developer.android.com/studio)をダウンロード
+   - Flutter pluginのインストール
 
-3. プロジェクトのセットアップ
+3. Android エミュレータのセットアップ
+   - Android StudioのAVD Managerを開く
+   - 「Create Virtual Device」をクリック
+   - デバイスとシステムイメージを選択（例：Pixel 4, API 33）
+   - エミュレータを作成
+
+4. 依存関係のインストール
    ```bash
-   # プロジェクトのクローン
-   git clone https://github.com/oreshihon-iida/Kensui.git
-   cd Kensui
-
-   # 依存パッケージのインストール
    flutter pub get
    ```
 
-### macOSでの環境構築
+### macOS
 
-1. Homebrewのインストール（未インストールの場合）
-   ```bash
-   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-   ```
-
-2. Flutter SDKのインストール
+1. Flutter SDKのインストール
    ```bash
    brew install flutter
    ```
 
-3. 開発ツールのインストール
+2. Xcode（iOS開発用）のインストール
+   - App Storeからインストール
+   - `sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer`
+   - `sudo xcodebuild -runFirstLaunch`
+
+3. Android Studio（Android開発用）のインストール
+   - [Android Studio](https://developer.android.com/studio)をダウンロード
+   - Flutter pluginのインストール
+
+4. Android エミュレータのセットアップ
+   - Android StudioのAVD Managerを開く
+   - 「Create Virtual Device」をクリック
+   - デバイスとシステムイメージを選択（例：Pixel 4, API 33）
+   - エミュレータを作成
+
+5. 依存関係のインストール
    ```bash
-   # Git（未インストールの場合）
-   brew install git
-
-   # Visual Studio Code
-   brew install --cask visual-studio-code
-   ```
-
-4. プロジェクトのセットアップ
-   ```bash
-   # プロジェクトのクローン
-   git clone https://github.com/oreshihon-iida/Kensui.git
-   cd Kensui
-
-   # 依存パッケージのインストール
    flutter pub get
    ```
 
-### 動作確認
+### Linux
 
-セットアップ完了後、以下のコマンドで開発サーバーを起動できます：
-```bash
-flutter run
-```
+1. Flutter SDKのインストール
+   ```bash
+   sudo snap install flutter --classic
+   ```
 
-注意事項：
-- 初期開発段階ではLinux DesktopまたはWebブラウザでの開発を推奨します
-- Android/iOSでの開発には追加のセットアップが必要になります
-- モバイル向け開発環境の構築手順は後日追加予定です
+2. 必要なパッケージのインストール
+   ```bash
+   sudo apt-get update
+   sudo apt-get install -y \
+     openjdk-11-jdk \
+     android-sdk \
+     qemu-kvm
+   ```
+
+3. Android Studioのインストール
+   - [Android Studio](https://developer.android.com/studio)をダウンロード
+   - Flutter pluginのインストール
+
+4. Android エミュレータのセットアップ
+   - KVMの有効化が必要：
+     ```bash
+     sudo usermod -aG kvm $USER
+     ```
+   - Android StudioのAVD Managerを開く
+   - 「Create Virtual Device」をクリック
+   - デバイスとシステムイメージを選択（例：Pixel 4, API 33）
+   - エミュレータを作成
+
+5. 依存関係のインストール
+   ```bash
+   flutter pub get
+   ```
+
+## エミュレータの要件
+
+### ハードウェア要件
+- Intel VT-x/AMD-V対応プロセッサ
+- ハードウェアアクセラレーション（Intel HAXM または KVM）
+- 最小4GB RAM
+- グラフィックスドライバーのサポート
+
+### 実機デバイスでのテスト
+- USBデバッグを有効にしたAndroidデバイス
+- または開発者モードを有効にしたiOSデバイス
+
+## トラブルシューティング
+
+### エミュレータが起動しない場合
+1. KVMの確認
+   ```bash
+   kvm-ok
+   ```
+
+2. ハードウェアアクセラレーションの確認
+   - BIOSでVT-x/AMD-Vが有効になっているか確認
+   - KVMモジュールが読み込まれているか確認
+   ```bash
+   lsmod | grep kvm
+   ```
+
+3. 権限の確認
+   ```bash
+   ls -l /dev/kvm
+   groups | grep kvm
+   ```
