@@ -16,7 +16,7 @@
 
 ## 3. データモデル
 
-### 3.1 トレーニング記録
+### 3.1 トレーニング記録とゴール設定
 ```dart
 class TrainingRecord {
   DateTime timestamp;  // 登録年月日時分
@@ -26,6 +26,11 @@ class TrainingRecord {
 class DailyTotal {
   DateTime date;      // 日付（DD形式）
   int totalRepetitions;
+  int dailyGoal;      // 一日の目標回数
+}
+
+class DailyGoal {
+  int targetRepetitions;  // 一日の目標回数
 }
 ```
 
@@ -34,6 +39,9 @@ class DailyTotal {
 ### 4.1 メイン画面
 - 回数入力フィールド（数値入力）
 - 保存ボタン
+- 一日の目標回数設定
+  - 目標回数入力フィールド
+  - 現在の目標回数表示
 - 日別合計回数の折れ線グラフ表示
   - X軸: 日付（DD形式）
   - Y軸: 合計回数
