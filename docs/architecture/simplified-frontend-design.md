@@ -19,13 +19,12 @@
 ### 3.1 トレーニング記録
 ```dart
 class TrainingRecord {
-  DateTime date;
-  int repetitions;
-  String notes;
+  DateTime timestamp;  // 登録年月日時分
+  int repetitions;    // 回数
 }
 
 class DailyTotal {
-  DateTime date;
+  DateTime date;      // 日付（DD形式）
   int totalRepetitions;
 }
 ```
@@ -44,7 +43,9 @@ class DailyTotal {
     - 全期間
 
 ### 4.2 履歴画面
-- 日付別トレーニング記録一覧
+- トレーニング記録一覧
+  - 登録年月日時分
+  - 回数
 - 各記録の編集・削除機能
 
 ## 5. データ永続化
