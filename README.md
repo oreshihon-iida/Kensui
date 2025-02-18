@@ -99,17 +99,22 @@
    flutter pub get
    ```
 
-## エミュレータの要件
+## 開発環境
 
-### ハードウェア要件
-- Intel VT-x/AMD-V対応プロセッサ
-- ハードウェアアクセラレーション（Intel HAXM または KVM）
-- 最小4GB RAM
-- グラフィックスドライバーのサポート
+### 推奨開発環境
+1. Webブラウザでの開発
+   - 最新のChrome、Firefox、またはSafari
+   - デバッグツールの利用可能
 
-### 実機デバイスでのテスト
-- USBデバッグを有効にしたAndroidデバイス
-- または開発者モードを有効にしたiOSデバイス
+2. デスクトップ環境での開発
+   - Linux、Windows、またはmacOS
+   - Flutter SDK
+   - Visual Studio Code（推奨）
+
+3. モバイル開発（オプション）
+   - Android Studio + エミュレータ
+   - 実機デバイス
+   - Firebase Test Lab（クラウドテスト）
 
 ## トラブルシューティング
 
