@@ -45,15 +45,14 @@
     window.addEventListener('load', function(ev) {
       _flutter = {
         loader: {
-          loadEntrypoint: function(options) {
-            var main = document.createElement('script');
-            main.src = 'main.dart.js';
-            document.body.appendChild(main);
+          load: function(options) {
+            var script = document.createElement('script');
+            script.src = 'main.dart.js';
+            document.body.appendChild(script);
           }
         }
       };
-      // Download main.dart.js
-      _flutter.loader.loadEntrypoint({});
+      _flutter.loader.load({});
     });
   </script>
 </body>
