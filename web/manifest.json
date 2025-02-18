@@ -8,6 +8,22 @@
     "description": "懸垂回数を記録するアプリケーション",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
+    "shortcuts": [
+        {
+            "name": "新規記録",
+            "url": "/",
+            "icons": [
+                {
+                    "src": "icons/Icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        }
+    ],
+    "scope": "/",
+    "related_applications": [],
+    "categories": ["fitness", "health", "lifestyle"],
+    "lang": "ja-JP",
     "icons": [
         {
             "src": "icons/Icon-192.png",
