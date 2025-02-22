@@ -1,29 +1,13 @@
 {
-    "name": "懸垂カウンター",
-    "short_name": "懸垂カウンター",
+    "name": "kensui",
+    "short_name": "kensui",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "懸垂回数を記録するアプリケーション",
+    "description": "A new Flutter project.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
-    "shortcuts": [
-        {
-            "name": "新規記録",
-            "url": "/",
-            "icons": [
-                {
-                    "src": "icons/Icon-192.png",
-                    "sizes": "192x192"
-                }
-            ]
-        }
-    ],
-    "scope": "/",
-    "related_applications": [],
-    "categories": ["fitness", "health", "lifestyle"],
-    "lang": "ja-JP",
     "icons": [
         {
             "src": "icons/Icon-192.png",
