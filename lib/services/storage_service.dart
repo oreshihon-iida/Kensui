@@ -8,6 +8,11 @@ class StorageService {
   static const String _dailyTotalsKey = 'daily_totals';
   final SharedPreferences _prefs;
 
+  // メモリ内キャッシュ
+  List<DailyTotal>? _cachedDailyTotals;
+  DateTime? _lastCacheUpdate;
+  static const Duration _cacheValidDuration = Duration(minutes: 30);
+
   StorageService(this._prefs);
 
   Future<void> saveRecord(TrainingRecord record) async {
@@ -33,11 +38,25 @@ class StorageService {
   }
 
   Future<List<DailyTotal>> getDailyTotals() async {
+    // キャッシュが有効な場合はキャッシュを返す
+    if (_isCacheValid()) {
+      return _cachedDailyTotals!;
+    }
+
     final String? data = _prefs.getString(_dailyTotalsKey);
     if (data == null) return [];
-    return (jsonDecode(data) as List)
+
+    _cachedDailyTotals = (jsonDecode(data) as List)
         .map((e) => DailyTotal.fromJson(e as Map<String, dynamic>))
         .toList();
+    _lastCacheUpdate = DateTime.now();
+    
+    return _cachedDailyTotals!;
+  }
+
+  bool _isCacheValid() {
+    if (_cachedDailyTotals == null || _lastCacheUpdate == null) return false;
+    return DateTime.now().difference(_lastCacheUpdate!) < _cacheValidDuration;
   }
 
   Future<void> _updateDailyTotals(List<TrainingRecord> records) async {
@@ -61,6 +80,15 @@ class StorageService {
     }).toList();
 
     totals.sort((a, b) => a.date.compareTo(b.date));
+    
+    // キャッシュと永続化ストレージを更新
+    _cachedDailyTotals = totals;
+    _lastCacheUpdate = DateTime.now();
     await _prefs.setString(_dailyTotalsKey, jsonEncode(totals.map((t) => t.toJson()).toList()));
+  }
+
+  Future<void> clearCache() async {
+    _cachedDailyTotals = null;
+    _lastCacheUpdate = null;
   }
 }

@@ -55,4 +55,58 @@ void main() {
       expect(dailyTotals.isEmpty, true);
     });
   });
+
+  group('StorageService Cache', () {
+    test('getDailyTotals returns cached data when cache is valid', () async {
+      final record = TrainingRecord(
+        timestamp: DateTime(2025, 2, 17, 15, 0),
+        repetitions: 10,
+      );
+
+      await storageService.saveRecord(record);
+      final firstResult = await storageService.getDailyTotals();
+      final secondResult = await storageService.getDailyTotals();
+
+      expect(firstResult.length, 1);
+      expect(secondResult.length, 1);
+      expect(identical(firstResult, secondResult), true);
+    });
+
+    test('clearCache invalidates the cache', () async {
+      final record = TrainingRecord(
+        timestamp: DateTime(2025, 2, 17, 15, 0),
+        repetitions: 10,
+      );
+
+      await storageService.saveRecord(record);
+      final firstResult = await storageService.getDailyTotals();
+      await storageService.clearCache();
+      final secondResult = await storageService.getDailyTotals();
+
+      expect(identical(firstResult, secondResult), false);
+      expect(secondResult.length, 1);
+      expect(secondResult.first.totalRepetitions, 10);
+    });
+
+    test('cache is updated when saving new record', () async {
+      final firstRecord = TrainingRecord(
+        timestamp: DateTime(2025, 2, 17, 15, 0),
+        repetitions: 10,
+      );
+      await storageService.saveRecord(firstRecord);
+      final firstResult = await storageService.getDailyTotals();
+
+      final secondRecord = TrainingRecord(
+        timestamp: DateTime(2025, 2, 17, 16, 0),
+        repetitions: 5,
+      );
+      await storageService.saveRecord(secondRecord);
+      final secondResult = await storageService.getDailyTotals();
+
+      expect(firstResult.length, 1);
+      expect(firstResult.first.totalRepetitions, 10);
+      expect(secondResult.length, 1);
+      expect(secondResult.first.totalRepetitions, 15);
+    });
+  });
 }
