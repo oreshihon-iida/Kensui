@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/daily_total_model.dart';
 import '../models/workout_model.dart';
 import '../services/workout_service.dart';
+import '../widgets/bottom_navigation.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late WorkoutService _workoutService;
   List<DailyTotalModel> _dailyTotals = [];
   bool _isLoading = true;
+  int _currentIndex = 0;
 
   @override
   void initState() {
@@ -71,6 +73,14 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('懸垂記録'),
+      ),
+      bottomNavigationBar: AppBottomNavigation(
+        currentIndex: _currentIndex,
+        onTap: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
