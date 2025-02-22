@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../services/storage_service.dart';
+import '../models/training_record.dart';
 
 class CountInput extends StatefulWidget {
   const CountInput({super.key});
@@ -11,10 +14,25 @@ class CountInput extends StatefulWidget {
 class _CountInputState extends State<CountInput> {
   final _formKey = GlobalKey<FormState>();
   final _controller = TextEditingController();
+  late final StorageService _storage;
 
-  void _saveCount() {
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((prefs) {
+      _storage = StorageService(prefs);
+    });
+  }
+
+  void _saveCount() async {
     if (_formKey.currentState!.validate()) {
-      // TODO: Implement save functionality
+      final count = int.parse(_controller.text);
+      await _storage.saveRecord(
+        TrainingRecord(
+          timestamp: DateTime.now(),
+          repetitions: count,
+        ),
+      );
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('保存しました')),
       );

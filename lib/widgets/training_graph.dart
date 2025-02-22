@@ -1,8 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../services/storage_service.dart';
+import '../models/daily_total.dart';
 
-class TrainingGraph extends StatelessWidget {
+class TrainingGraph extends StatefulWidget {
   const TrainingGraph({super.key});
+
+  @override
+  State<TrainingGraph> createState() => _TrainingGraphState();
+}
+
+class _TrainingGraphState extends State<TrainingGraph> {
+  late final StorageService _storage;
+  List<DailyTotal> _dailyTotals = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeStorage();
+  }
+
+  Future<void> _initializeStorage() async {
+    final prefs = await SharedPreferences.getInstance();
+    _storage = StorageService(prefs);
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    final totals = await _storage.getDailyTotals();
+    setState(() {
+      _dailyTotals = totals;
+    });
+  }
+
+  List<FlSpot> _getSpots() {
+    if (_dailyTotals.isEmpty) return [const FlSpot(0, 0)];
+    
+    return _dailyTotals.asMap().entries.map((entry) {
+      return FlSpot(entry.key.toDouble(), entry.value.totalRepetitions.toDouble());
+    }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +79,8 @@ class TrainingGraph extends StatelessWidget {
                   ),
                   borderData: FlBorderData(show: true),
                   lineBarsData: [
-                    // TODO: Implement actual data
                     LineChartBarData(
-                      spots: const [
-                        FlSpot(0, 0),
-                      ],
+                      spots: _getSpots(),
                       isCurved: true,
                       color: Theme.of(context).primaryColor,
                     ),
