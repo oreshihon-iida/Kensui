@@ -6,12 +6,20 @@
 - 懸垂回数の記録
 - 日別グラフ表示
 - ローカルストレージでのデータ保存
+- PWAサポート（ホーム画面へのインストール）
+- オフラインサポート
 
 ## 環境構築手順
 
 ### 必要な環境
-- Flutter SDK
-- Android Studio または Visual Studio Code
+- Flutter SDK (3.x以上)
+- Git
+- Visual Studio Code + Flutter拡張機能
+- Webブラウザ（Chrome推奨）
+
+### プラットフォーム別の追加要件
+#### モバイル開発用（オプション）
+- Android Studio
 - Android SDK
 - エミュレータまたは実機デバイス
 
@@ -101,22 +109,56 @@
 
 ## 開発環境
 
-### 推奨開発環境
-1. Webブラウザでの開発
-   - 最新のChrome、Firefox、またはSafari
-   - デバッグツールの利用可能
+### アプリケーションの実行
 
-2. デスクトップ環境での開発
-   - Linux、Windows、またはmacOS
-   - Flutter SDK
-   - Visual Studio Code（推奨）
+#### Webアプリケーションの実行
+1. リポジトリのクローン
+   ```bash
+   git clone https://github.com/oreshihon-iida/Kensui.git
+   cd Kensui
+   ```
 
-3. モバイル開発（オプション）
-   - Android Studio + エミュレータ
-   - 実機デバイス
-   - Firebase Test Lab（クラウドテスト）
+2. 依存関係のインストール
+   ```bash
+   flutter pub get
+   ```
+
+3. Webアプリケーションの起動
+   ```bash
+   flutter run -d web-server --web-port 8080 --release
+   ```
+
+4. ブラウザでアクセス
+   - http://localhost:8080 にアクセス
+   - PWA機能を利用する場合は、Chromeのインストールプロンプトに従ってください
+
+#### デバッグモードでの実行
+開発時は以下のコマンドでデバッグモードを使用できます：
+```bash
+flutter run -d web-server --web-port 8080
+```
+
+#### ビルドとデプロイ
+リリース用のビルドを作成：
+```bash
+flutter build web --release
+```
+ビルドされたファイルは `build/web` ディレクトリに出力されます。
 
 ## トラブルシューティング
+
+### Webアプリケーションの問題
+1. キャッシュの問題
+   - ブラウザのキャッシュをクリア
+   - `flutter clean` を実行して再ビルド
+
+2. 依存関係の問題
+   - `flutter pub get` を再実行
+   - `flutter pub outdated` で更新可能なパッケージを確認
+
+3. ビルドエラー
+   - `flutter clean` を実行
+   - `flutter doctor` で環境の問題を確認
 
 ### エミュレータが起動しない場合
 1. KVMの確認
