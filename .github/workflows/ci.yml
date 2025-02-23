@@ -39,7 +39,7 @@ jobs:
           ~/.pub-cache
           ~/.gradle/caches
           ~/.gradle/wrapper
-        key: ${{ runner.os }}-flutter-${{ hashFiles("**/pubspec.lock") }}
+        key: ${{ runner.os }}-flutter-${{ hashFiles('**/pubspec.lock') }}
         restore-keys: |
           ${{ runner.os }}-flutter-
     
