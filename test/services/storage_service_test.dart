@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:kensui/services/storage_service.dart';
 import 'package:kensui/models/training_record.dart';
-import 'package:kensui/models/daily_total.dart';
 
 void main() {
   late StorageService storageService;
