@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../models/user_profile_model.dart';
-import '../widgets/custom_text_field.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
@@ -39,6 +38,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   void _saveProfile() {
     if (_formKey.currentState!.validate()) {
+      // TODO: プロフィール保存処理の実装
       final profile = UserProfileModel(
         height: double.parse(_heightController.text),
         weight: double.parse(_weightController.text),
@@ -47,7 +47,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           : null,
       );
       
-      // TODO: プロフィール保存処理の実装
+      // プロフィールの保存処理を実装
+      // SharedPreferencesへの保存は別のPRで実装予定
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('プロフィールを保存しました')),
       );
