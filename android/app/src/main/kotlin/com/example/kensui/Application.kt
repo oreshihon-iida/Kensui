@@ -2,14 +2,10 @@ package com.example.kensui
 
 import io.flutter.app.FlutterApplication
 import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.plugin.common.PluginRegistry
+import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugins.GeneratedPluginRegistrant
 
-class Application : FlutterApplication(), PluginRegistry.PluginRegistrantCallback {
-    override fun registerWith(registry: PluginRegistry) {
-        // Legacy v1 plugin registration
-    }
-
+class Application : FlutterApplication() {
     override fun onCreate() {
         super.onCreate()
     }
