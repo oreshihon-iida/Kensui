@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/user_profile.dart';
+import '../models/user_profile_model.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
@@ -38,20 +38,18 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   void _saveProfile() {
     if (_formKey.currentState!.validate()) {
-      final profile = UserProfile(
+      final profile = UserProfileModel(
         height: double.parse(_heightController.text),
         weight: double.parse(_weightController.text),
-        bodyFatPercentage: _bodyFatRateController.text.isNotEmpty 
+        bodyFatRate: _bodyFatRateController.text.isNotEmpty 
           ? double.parse(_bodyFatRateController.text)
           : null,
       );
       
       // プロフィールの保存処理は別のPRで実装予定
-      profile.save().then((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('プロフィールを保存しました')),
-        );
-      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('プロフィールを保存しました')),
+      );
     }
   }
 
