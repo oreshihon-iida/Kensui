@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/training_record.dart';
 import '../models/daily_total.dart';
+import '../models/user_profile_model.dart';
 
 class StorageService {
   static const String _recordsKey = 'training_records';
   static const String _dailyTotalsKey = 'daily_totals';
+  static const String _userProfileKey = 'user_profile';
   final SharedPreferences _prefs;
 
   // メモリ内キャッシュ
@@ -86,6 +88,20 @@ class StorageService {
     _lastCacheUpdate = DateTime.now();
     await _prefs.setString(_dailyTotalsKey, jsonEncode(totals.map((t) => t.toJson()).toList()));
   }
+
+  // ユーザープロフィールの保存
+  Future<void> saveUserProfile(UserProfileModel profile) async {
+    await _prefs.setString(_userProfileKey, jsonEncode(profile.toJson()));
+  }
+
+  // ユーザープロフィールの取得
+  Future<UserProfileModel?> getUserProfile() async {
+    final jsonString = _prefs.getString(_userProfileKey);
+    if (jsonString == null) return null;
+    
+    return UserProfileModel.fromJson(jsonDecode(jsonString));
+  }
+
 
   Future<void> clearCache() async {
     _cachedDailyTotals = null;
