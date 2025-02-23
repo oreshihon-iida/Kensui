@@ -20,11 +20,15 @@ android {
 
     defaultConfig {
         applicationId = "com.oreshihon.kensui"
-        minSdk = flutter.minSdkVersion
+        minSdk = 21 // Ensure minimum SDK version for v2 embedding
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         multiDexEnabled = true
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
