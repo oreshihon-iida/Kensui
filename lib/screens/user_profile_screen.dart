@@ -38,6 +38,14 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   void _saveProfile() {
     if (_formKey.currentState!.validate()) {
+      // ignore: unused_local_variable
+      final profile = UserProfileModel(
+        height: double.parse(_heightController.text),
+        weight: double.parse(_weightController.text),
+        bodyFatRate: _bodyFatRateController.text.isNotEmpty 
+          ? double.parse(_bodyFatRateController.text)
+          : null,
+      );
       // プロフィールの保存処理は別のPRで実装予定
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('プロフィールを保存しました')),
