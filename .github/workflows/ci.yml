@@ -1,5 +1,6 @@
 name: Flutter CI
 
+# Workflow for Flutter project
 on:
   push:
     branches:
