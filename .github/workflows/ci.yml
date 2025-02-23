@@ -60,9 +60,5 @@ jobs:
     - name: Build Android
       run: |
         flutter build apk --release
-        flutter build appbundle --release--release
-      
-    - name: Build Android
-      run: |
-        flutter build apk --release
+        flutter build appbundle --release
         flutter build appbundle --release
