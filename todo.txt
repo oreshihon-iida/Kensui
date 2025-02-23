@@ -1,0 +1,3 @@
+- [x] docs/architecture/simplified-frontend-design.md
+- [x] docs/playbook/app-store-guidelines.md
+- [x] README.md
