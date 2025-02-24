@@ -47,6 +47,12 @@ class WorkoutGraph extends StatelessWidget {
               showTitles: true,
               reservedSize: 40,
               interval: _calculateInterval(),
+              getTitlesWidget: (value, meta) {
+                return Text(
+                  value.toInt().toString(),
+                  style: const TextStyle(fontSize: 12),
+                );
+              },
             ),
           ),
           bottomTitles: AxisTitles(
