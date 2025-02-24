@@ -5,10 +5,10 @@ class MonthCalendarWidget extends StatelessWidget {
   final Function(DateTime) onDateSelected;
 
   const MonthCalendarWidget({
-    Key? key,
+    super.key,
     required this.selectedDate,
     required this.onDateSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

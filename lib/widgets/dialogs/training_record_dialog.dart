@@ -7,11 +7,11 @@ class TrainingRecordDialog extends StatelessWidget {
   final Function(TrainingRecord) onSave;
 
   const TrainingRecordDialog({
-    Key? key,
+    super.key,
     required this.selectedDate,
     this.record,
     required this.onSave,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

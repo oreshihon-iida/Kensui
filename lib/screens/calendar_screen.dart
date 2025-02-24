@@ -4,7 +4,7 @@ import '../widgets/dialogs/training_record_dialog.dart';
 import '../models/training_record.dart';
 
 class CalendarScreen extends StatefulWidget {
-  const CalendarScreen({Key? key}) : super(key: key);
+  const CalendarScreen({super.key});
 
   @override
   State<CalendarScreen> createState() => _CalendarScreenState();
@@ -65,8 +65,8 @@ class _CalendarScreenState extends State<CalendarScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showTrainingRecordDialog(_selectedDate),
-        child: const Icon(Icons.add),
         tooltip: '記録を追加',
+        child: const Icon(Icons.add),
       ),
     );
   }
