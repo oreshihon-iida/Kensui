@@ -5,6 +5,8 @@ import 'scrollable_dialog_content.dart';
 String formatTimeJst(DateTime utcTime) {
   // Convert UTC to JST by adding 9 hours
   final jstHour = (utcTime.hour + 9) % 24;
+  final jstDay = utcTime.hour + 9 >= 24;
+  // Use the hour value directly since we're displaying JST
   return '${jstHour.toString().padLeft(2, '0')}:${utcTime.minute.toString().padLeft(2, '0')}';
 }
 
@@ -96,11 +98,12 @@ class TrainingRecordDialog extends StatelessWidget {
                 onPressed: () {
                   final repetitions = int.tryParse(repetitionsController.text);
                   if (repetitions != null && repetitions >= 0) {
-                    // Use the selected date's year/month/day with current time
+                    // Get current time in JST
                     final now = DateTime.now();
-                    // Convert current JST time to UTC (subtract 9 hours)
-                    final utcHour = (now.hour - 9 + 24) % 24;
-                    final utcDay = now.hour < 9;
+                    // Convert JST to UTC for storage (JST is UTC+9)
+                    final jstHour = now.hour;
+                    final utcHour = (jstHour - 9 + 24) % 24;
+                    final utcDay = jstHour < 9;
                     final timestamp = DateTime.utc(
                       selectedDate.year,
                       selectedDate.month,
