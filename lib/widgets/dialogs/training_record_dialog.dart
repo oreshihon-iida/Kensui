@@ -3,7 +3,7 @@ import '../../models/training_record.dart';
 import 'scrollable_dialog_content.dart';
 
 String formatTimeJst(DateTime utcTime) {
-  final jst = utcTime.toUtc().add(const Duration(hours: 9));
+  final jst = utcTime.add(const Duration(hours: 9));
   return '${jst.hour.toString().padLeft(2, '0')}:${jst.minute.toString().padLeft(2, '0')}';
 }
 
@@ -102,8 +102,8 @@ class TrainingRecordDialog extends StatelessWidget {
                       selectedDate.year,
                       selectedDate.month,
                       selectedDate.day,
-                      jst.hour,
-                      jst.minute,
+                      now.hour,
+                      now.minute,
                     );
                     onSave(TrainingRecord(
                       timestamp: timestamp,
