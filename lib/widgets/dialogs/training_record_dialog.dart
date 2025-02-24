@@ -90,13 +90,12 @@ class TrainingRecordDialog extends StatelessWidget {
                 onPressed: () {
                   final repetitions = int.tryParse(repetitionsController.text);
                   if (repetitions != null && repetitions >= 0) {
-                    final now = DateTime.now();
                     final timestamp = DateTime(
                       selectedDate.year,
                       selectedDate.month,
                       selectedDate.day,
-                      now.hour,
-                      now.minute,
+                      selectedDate.hour,
+                      selectedDate.minute,
                     );
                     onSave(TrainingRecord(
                       timestamp: timestamp,
