@@ -69,9 +69,9 @@ class WorkoutGraph extends StatelessWidget {
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
                 if (index >= 0 && index < dailyTotals.length) {
-                  // 日付順（古い順）にソート
+                  // 日付順（新しい順）にソート
                   final sortedTotals = List<DailyTotalModel>.from(dailyTotals)
-                    ..sort((a, b) => a.date.compareTo(b.date));
+                    ..sort((a, b) => b.date.compareTo(a.date));
                   final date = sortedTotals[index].date;
                   
                   // 日付の重複を避けるため、前の日付と比較
@@ -114,9 +114,9 @@ class WorkoutGraph extends StatelessWidget {
   }
 
   List<FlSpot> _createDataPoints() {
-    // 日付順（古い順）にソート
+    // 日付順（新しい順）にソート
     final sortedTotals = List<DailyTotalModel>.from(dailyTotals)
-      ..sort((a, b) => a.date.compareTo(b.date));
+      ..sort((a, b) => b.date.compareTo(a.date));
     
     return List.generate(sortedTotals.length, (index) {
       final total = sortedTotals[index];
