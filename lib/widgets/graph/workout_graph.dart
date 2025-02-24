@@ -96,16 +96,21 @@ class WorkoutGraph extends StatelessWidget {
                 final date = DateTime.fromMillisecondsSinceEpoch(
                   (value * 24 * 60 * 60 * 1000).toInt(),
                 );
-                // 月曜日、月初め、データの最初と最後の日付の場合に表示
-                if (date.weekday == DateTime.monday || 
-                    date.day == 1 || 
-                    date.isAtSameMomentAs(sortedTotals.first.date) || 
-                    date.isAtSameMomentAs(sortedTotals.last.date)) {
-                  return Text(
-                    '${date.month.toString().padLeft(2, '0')}/${date.day.toString().padLeft(2, '0')}',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
+                // 週の境界、月初め、データの最初と最後の日付の場合に表示
+                final isFirstOrLastDate = date.isAtSameMomentAs(sortedTotals.first.date) || 
+                                        date.isAtSameMomentAs(sortedTotals.last.date);
+                final isWeekBoundary = date.weekday == DateTime.monday;
+                final isMonthStart = date.day == 1;
+
+                if (isFirstOrLastDate || isWeekBoundary || isMonthStart) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    child: Text(
+                      '${date.month.toString().padLeft(2, '0')}/${date.day.toString().padLeft(2, '0')}',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   );
                 }
@@ -169,24 +174,21 @@ class WorkoutGraph extends StatelessWidget {
     // 期間に応じてデータをフィルタリング
     switch (selectedPeriod) {
       case '1month':
-        // 現在の月の1日から過去1か月
-        final currentMonthStart = DateTime(now.year, now.month, 1);
-        final oneMonthAgo = DateTime(now.year, now.month - 1, 1);
+        // 過去1か月から現在まで
+        final oneMonthAgo = now.subtract(const Duration(days: 30));
         filteredData.removeWhere((total) => 
-          total.date.isBefore(oneMonthAgo) || total.date.isAfter(currentMonthStart.add(const Duration(days: 31))));
+          total.date.isBefore(oneMonthAgo) || total.date.isAfter(now));
         break;
       case '3months':
-        // 現在の月の1日から過去3か月
-        final currentMonthStart = DateTime(now.year, now.month, 1);
-        final threeMonthsAgo = DateTime(now.year, now.month - 3, 1);
+        // 過去3か月から現在まで
+        final threeMonthsAgo = now.subtract(const Duration(days: 90));
         filteredData.removeWhere((total) => 
-          total.date.isBefore(threeMonthsAgo) || total.date.isAfter(currentMonthStart.add(const Duration(days: 31))));
+          total.date.isBefore(threeMonthsAgo) || total.date.isAfter(now));
         break;
       case 'all':
       default:
-        // データが存在する最古の日から現在の月末まで
-        final currentMonthEnd = DateTime(now.year, now.month + 1, 0);
-        filteredData.removeWhere((total) => total.date.isAfter(currentMonthEnd));
+        // 最古のデータから現在まで
+        filteredData.removeWhere((total) => total.date.isAfter(now));
         break;
     }
     
