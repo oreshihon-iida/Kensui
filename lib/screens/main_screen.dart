@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../navigation/app_navigation_state.dart';
 import '../widgets/bottom_navigation.dart';
 import 'home_screen.dart';
-import 'history_screen.dart';
+import 'calendar_screen.dart';
 import 'profile_screen.dart';
 
 class MainScreen extends StatelessWidget {
@@ -20,7 +20,7 @@ class MainScreen extends StatelessWidget {
               index: navigationState.currentIndex,
               children: const [
                 HomeScreen(),
-                HistoryScreen(),
+                CalendarScreen(),
                 ProfileScreen(),
               ],
             ),
