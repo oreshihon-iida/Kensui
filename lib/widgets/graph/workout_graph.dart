@@ -72,8 +72,9 @@ class WorkoutGraph extends StatelessWidget {
                 final filteredData = _filterDataByPeriod();
                 if (index >= 0 && index < filteredData.length) {
                   final date = filteredData[index].date;
-                  // 週単位で表示（7日ごと）
-                  if (index % 7 == 0 || index == filteredData.length - 1) {
+                  // 週の始まり（月曜日）を基準に表示
+                  final weekday = date.weekday;
+                  if (weekday == DateTime.monday || index == filteredData.length - 1) {
                     return Text(
                       '${date.month}/${date.day}',
                       style: const TextStyle(fontSize: 10),
