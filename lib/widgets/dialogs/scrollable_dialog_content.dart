@@ -14,9 +14,13 @@ class ScrollableDialogContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: maxHeight,
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxHeight: maxHeight,
+        minHeight: 0,
+      ),
       child: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
         child: Padding(
           padding: padding,
           child: Column(

@@ -5,7 +5,7 @@ import 'package:kensui/models/training_record.dart';
 
 void main() {
   testWidgets('TrainingRecordDialog handles long record lists', (WidgetTester tester) async {
-    final now = DateTime(2025, 2, 24, 4, 42); // Fixed timestamp for test
+    final now = DateTime(2025, 2, 24, 4, 42); // Fixed timestamp
     final records = List.generate(50, (i) => TrainingRecord(
       timestamp: now.subtract(Duration(minutes: i)),
       repetitions: 10 + i,
@@ -23,27 +23,25 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    // Dialog should be visible
-    expect(find.byType(AlertDialog), findsOneWidget);
-    
-    // Should show records in descending order
-    final firstRecord = records.first;
-    final time = '${firstRecord.timestamp.hour.toString().padLeft(2, '0')}:${firstRecord.timestamp.minute.toString().padLeft(2, '0')}';
-    expect(find.text('$time ${firstRecord.repetitions}回'), findsOneWidget);
-    
-    // Should be able to scroll
-    await tester.drag(find.byType(ListView), const Offset(0, -500));
+    // Verify first record is visible
+    expect(find.text('04:42 10回'), findsOneWidget);
+
+    // Verify scrolling works
+    await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -500));
     await tester.pumpAndSettle();
 
-    // Should show records at the bottom
-    expect(find.text('${records.last.repetitions}回'), findsOneWidget);
+    // Verify last record is visible
+    final lastRecord = records.last;
+    final lastTime = '${lastRecord.timestamp.hour.toString().padLeft(2, '0')}:${lastRecord.timestamp.minute.toString().padLeft(2, '0')}';
+    expect(find.text('$lastTime ${lastRecord.repetitions}回'), findsOneWidget);
   });
 
   testWidgets('TrainingRecordDialog shows empty state message', (WidgetTester tester) async {
+    final now = DateTime(2025, 2, 24, 4, 42); // Fixed timestamp
     await tester.pumpWidget(MaterialApp(
       home: Builder(
         builder: (context) => TrainingRecordDialog(
-          selectedDate: DateTime.now(),
+          selectedDate: now,
           dayRecords: const [],
           onSave: (_) {},
         ),
@@ -56,13 +54,14 @@ void main() {
   });
 
   testWidgets('TrainingRecordDialog saves record with current time', (WidgetTester tester) async {
+    final now = DateTime(2025, 2, 24, 4, 42); // Fixed timestamp
     DateTime? savedTimestamp;
     int? savedRepetitions;
 
     await tester.pumpWidget(MaterialApp(
       home: Builder(
         builder: (context) => TrainingRecordDialog(
-          selectedDate: DateTime.now(),
+          selectedDate: now,
           dayRecords: const [],
           onSave: (record) {
             savedTimestamp = record.timestamp;
@@ -83,7 +82,7 @@ void main() {
 
     // Verify record was saved with current time
     expect(savedRepetitions, equals(50));
-    expect(savedTimestamp?.hour, equals(DateTime.now().hour));
-    expect(savedTimestamp?.minute, equals(DateTime.now().minute));
+    expect(savedTimestamp?.hour, equals(now.hour));
+    expect(savedTimestamp?.minute, equals(now.minute));
   });
 }

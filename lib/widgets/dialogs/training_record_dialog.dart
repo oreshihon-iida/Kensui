@@ -18,14 +18,19 @@ class TrainingRecordDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController repetitionsController = TextEditingController(
+    final repetitionsController = TextEditingController(
       text: record?.repetitions.toString() ?? '',
     );
 
-    return AlertDialog(
-      title: const Text('トレーニング記録'),
-      content: ScrollableDialogContent(
+    return Dialog(
+      child: ScrollableDialogContent(
+        maxHeight: MediaQuery.of(context).size.height * 0.7,
         children: [
+          Text(
+            'トレーニング記録',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+          const SizedBox(height: 16),
           Text('日付: ${selectedDate.day}日'),
           const SizedBox(height: 16),
           TextFormField(
@@ -48,59 +53,64 @@ class TrainingRecordDialog extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           const Divider(),
-          const Text('本日の記録', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          Text(
+            '本日の記録',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
           const SizedBox(height: 8),
           if (dayRecords.isEmpty)
             const Text('記録はありません')
           else
-            Container(
-              constraints: const BoxConstraints(maxHeight: 200),
-              child: ListView.separated(
-                shrinkWrap: true,
-                itemCount: dayRecords.length,
-                separatorBuilder: (context, index) => const Divider(),
-                itemBuilder: (context, index) {
-                  final record = dayRecords[index];
-                  final time = '${record.timestamp.hour.toString().padLeft(2, '0')}:${record.timestamp.minute.toString().padLeft(2, '0')}';
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Text(
-                      '$time ${record.repetitions}回',
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                  );
-                },
-              ),
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: dayRecords.length,
+              separatorBuilder: (_, __) => const Divider(),
+              itemBuilder: (context, index) {
+                final record = dayRecords[index];
+                final time = '${record.timestamp.hour.toString().padLeft(2, '0')}:${record.timestamp.minute.toString().padLeft(2, '0')}';
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: Text(
+                    '$time ${record.repetitions}回',
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                );
+              },
             ),
+          const SizedBox(height: 16),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('キャンセル'),
+              ),
+              TextButton(
+                onPressed: () {
+                  final repetitions = int.tryParse(repetitionsController.text);
+                  if (repetitions != null && repetitions >= 0) {
+                    final now = DateTime.now();
+                    final timestamp = DateTime(
+                      selectedDate.year,
+                      selectedDate.month,
+                      selectedDate.day,
+                      now.hour,
+                      now.minute,
+                    );
+                    onSave(TrainingRecord(
+                      timestamp: timestamp,
+                      repetitions: repetitions,
+                    ));
+                    Navigator.pop(context);
+                  }
+                },
+                child: const Text('保存'),
+              ),
+            ],
+          ),
         ],
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text('キャンセル'),
-        ),
-        TextButton(
-          onPressed: () {
-            final repetitions = int.tryParse(repetitionsController.text);
-            if (repetitions != null && repetitions >= 0) {
-              final now = DateTime.now();
-              final timestamp = DateTime(
-                selectedDate.year,
-                selectedDate.month,
-                selectedDate.day,
-                now.hour,
-                now.minute,
-              );
-              onSave(TrainingRecord(
-                timestamp: timestamp,
-                repetitions: repetitions,
-              ));
-              Navigator.pop(context);
-            }
-          },
-          child: const Text('保存'),
-        ),
-      ],
     );
   }
 }
