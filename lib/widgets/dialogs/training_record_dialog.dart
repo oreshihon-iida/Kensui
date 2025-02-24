@@ -96,7 +96,6 @@ class TrainingRecordDialog extends StatelessWidget {
                   final repetitions = int.tryParse(repetitionsController.text);
                   if (repetitions != null && repetitions >= 0) {
                     final now = DateTime.now().toUtc();
-                    final jst = now.add(const Duration(hours: 9)); // Convert to JST
                     final timestamp = DateTime.utc(
                       selectedDate.year,
                       selectedDate.month,
