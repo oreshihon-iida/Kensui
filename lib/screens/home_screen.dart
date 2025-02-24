@@ -65,7 +65,11 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       await _workoutService.saveWorkout(workout);
       _repetitionsController.clear();
-      await _loadDailyTotals(); // Ensure graph updates
+      await _loadDailyTotals(); // グラフを即時更新
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('記録の保存中にエラーが発生しました')),
+      );
     } finally {
       setState(() => _isLoading = false);
     }
