@@ -47,9 +47,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _saveWorkout() async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     final count = int.tryParse(_repetitionsController.text);
     if (count == null || count <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      scaffoldMessenger.showSnackBar(
         const SnackBar(content: Text('有効な回数を入力してください')),
       );
       return;
@@ -67,10 +68,12 @@ class _HomeScreenState extends State<HomeScreen> {
       _repetitionsController.clear();
       await _loadDailyTotals(); // グラフを即時更新
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      if (!mounted) return;
+      scaffoldMessenger.showSnackBar(
         const SnackBar(content: Text('記録の保存中にエラーが発生しました')),
       );
     } finally {
+      if (!mounted) return;
       setState(() => _isLoading = false);
     }
   }
