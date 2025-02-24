@@ -3,7 +3,9 @@ import '../../models/training_record.dart';
 import 'scrollable_dialog_content.dart';
 
 String formatTimeJst(DateTime utcTime) {
-  final jst = utcTime.add(const Duration(hours: 9));
+  // Ensure input is in UTC before converting to JST
+  final utc = utcTime.toUtc();
+  final jst = utc.add(const Duration(hours: 9));
   return '${jst.hour.toString().padLeft(2, '0')}:${jst.minute.toString().padLeft(2, '0')}';
 }
 
