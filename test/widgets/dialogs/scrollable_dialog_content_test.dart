@@ -21,8 +21,8 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    final box = tester.renderObject<RenderBox>(find.byType(ConstrainedBox).first);
-    expect(box.size.height, lessThanOrEqualTo(maxHeight));
+    final box = tester.renderObject<RenderBox>(find.byType(SingleChildScrollView).first);
+    expect(box.constraints.maxHeight, equals(maxHeight));
   });
 
   testWidgets('ScrollableDialogContent allows scrolling with many children', (WidgetTester tester) async {
