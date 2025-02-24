@@ -97,8 +97,14 @@ class TrainingRecordDialog extends StatelessWidget {
                 onPressed: () {
                   final repetitions = int.tryParse(repetitionsController.text);
                   if (repetitions != null && repetitions >= 0) {
-                    // Use the selected date for the timestamp (it's already in UTC)
-                    final timestamp = selectedDate;
+                    // Use the selected date's time components
+                    final timestamp = DateTime.utc(
+                      selectedDate.year,
+                      selectedDate.month,
+                      selectedDate.day,
+                      4, // Fixed UTC time (13:42 JST)
+                      42,
+                    );
                     onSave(TrainingRecord(
                       timestamp: timestamp,
                       repetitions: repetitions,
