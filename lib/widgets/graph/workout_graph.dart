@@ -69,19 +69,11 @@ class WorkoutGraph extends StatelessWidget {
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
                 if (index >= 0 && index < dailyTotals.length) {
-                  // 日付順（新しい順）にソート
-                  final sortedTotals = List<DailyTotalModel>.from(dailyTotals)
-                    ..sort((a, b) => b.date.compareTo(a.date));
-                  final date = sortedTotals[index].date;
-                  
-                  // 日付の重複を避けるため、前の日付と比較
-                  if (index == 0 || index == sortedTotals.length - 1 ||
-                      (index > 0 && sortedTotals[index - 1].date.day != date.day)) {
-                    return Text(
-                      '${date.month}/${date.day}',
-                      style: const TextStyle(fontSize: 10),
-                    );
-                  }
+                  final date = dailyTotals[dailyTotals.length - 1 - index].date;
+                  return Text(
+                    '${date.month}/${date.day}',
+                    style: const TextStyle(fontSize: 10),
+                  );
                 }
                 return const Text('');
               },
@@ -113,12 +105,8 @@ class WorkoutGraph extends StatelessWidget {
   }
 
   List<FlSpot> _createDataPoints() {
-    // 日付順（新しい順）にソート
-    final sortedTotals = List<DailyTotalModel>.from(dailyTotals)
-      ..sort((a, b) => b.date.compareTo(a.date));
-    
-    return List.generate(sortedTotals.length, (index) {
-      final total = sortedTotals[index];
+    return List.generate(dailyTotals.length, (index) {
+      final total = dailyTotals[index];
       final y = graphType == GraphType.count
           ? total.totalCount.toDouble()
           : total.workouts.fold<double>(
@@ -129,7 +117,7 @@ class WorkoutGraph extends StatelessWidget {
                       .toDouble(),
             );
       // X軸の値を反転（新しい日付が右側に表示）
-      return FlSpot((sortedTotals.length - 1 - index).toDouble(), y);
+      return FlSpot((dailyTotals.length - 1 - index).toDouble(), y);
     });
   }
 
