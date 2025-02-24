@@ -96,9 +96,9 @@ class TrainingRecordDialog extends StatelessWidget {
                 onPressed: () {
                   final repetitions = int.tryParse(repetitionsController.text);
                   if (repetitions != null && repetitions >= 0) {
-                    // Get current time in JST
+                    // Use the selected date's year/month/day with current time
                     final now = DateTime.now();
-                    // Convert JST to UTC for storage (JST is UTC+9)
+                    // Convert current JST time to UTC (subtract 9 hours)
                     final utcHour = (now.hour - 9 + 24) % 24;
                     final utcDay = now.hour < 9;
                     final timestamp = DateTime.utc(
@@ -107,7 +107,7 @@ class TrainingRecordDialog extends StatelessWidget {
                       utcDay ? selectedDate.day - 1 : selectedDate.day,
                       utcHour,
                       now.minute,
-                    ).toLocal();
+                    );
                     onSave(TrainingRecord(
                       timestamp: timestamp,
                       repetitions: repetitions,
