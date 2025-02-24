@@ -60,8 +60,7 @@ class WorkoutGraph extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 40,
-              interval: _calculateInterval(),
-              maxLines: 1,
+              interval: _calculateYAxisInterval(),
               getTitlesWidget: (value, meta) {
                 return Text(
                   value.toInt().toString(),
@@ -136,6 +135,7 @@ class WorkoutGraph extends StatelessWidget {
                       .toDouble(),
             );
       return FlSpot(x, y);
+    });
   }
 
   List<DailyTotalModel> _filterDataByPeriod() {
