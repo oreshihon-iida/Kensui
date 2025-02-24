@@ -59,9 +59,10 @@ class WorkoutGraph extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               getTitlesWidget: (value, meta) {
-                if (value.toInt() >= 0 && value.toInt() < dailyTotals.length) {
+                final index = dailyTotals.length - 1 - value.toInt();
+                if (index >= 0 && index < dailyTotals.length) {
                   return Text(
-                    dailyTotals[value.toInt()].date.day.toString(),
+                    dailyTotals[index].date.day.toString(),
                     style: const TextStyle(fontSize: 12),
                   );
                 }
