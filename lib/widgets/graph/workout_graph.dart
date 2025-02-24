@@ -69,11 +69,23 @@ class WorkoutGraph extends StatelessWidget {
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
                 if (index >= 0 && index < dailyTotals.length) {
-                  final date = dailyTotals[dailyTotals.length - 1 - index].date;
-                  return Text(
-                    '${date.month}/${date.day}',
-                    style: const TextStyle(fontSize: 10),
-                  );
+                  final currentDate = dailyTotals[dailyTotals.length - 1 - index].date;
+                  // 日付の重複を避けるため、前の日付と比較
+                  if (index == 0 || index == dailyTotals.length - 1) {
+                    // 最初と最後の日付は必ず表示
+                    return Text(
+                      '${currentDate.month}/${currentDate.day}',
+                      style: const TextStyle(fontSize: 10),
+                    );
+                  } else {
+                    final prevDate = dailyTotals[dailyTotals.length - index].date;
+                    if (currentDate.day != prevDate.day || currentDate.month != prevDate.month) {
+                      return Text(
+                        '${currentDate.month}/${currentDate.day}',
+                        style: const TextStyle(fontSize: 10),
+                      );
+                    }
+                  }
                 }
                 return const Text('');
               },
