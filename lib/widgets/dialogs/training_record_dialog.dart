@@ -105,14 +105,15 @@ class TrainingRecordDialog extends StatelessWidget {
                   if (repetitions != null && repetitions >= 0) {
                     // Get current time in JST
                     final jstNow = DateTime.now();
-                    // Convert JST to UTC for storage
-                    final utcNow = toUtc(jstNow);
+                    // Convert JST to UTC for storage, handling day boundaries
+                    final utcHour = jstNow.hour - 9;
+                    final utcDay = utcHour < 0 ? selectedDate.day - 1 : selectedDate.day;
                     final timestamp = DateTime.utc(
                       selectedDate.year,
                       selectedDate.month,
-                      selectedDate.day,
-                      utcNow.hour,
-                      utcNow.minute,
+                      utcDay,
+                      utcHour < 0 ? utcHour + 24 : utcHour,
+                      jstNow.minute,
                     );
                     onSave(TrainingRecord(
                       timestamp: timestamp,
