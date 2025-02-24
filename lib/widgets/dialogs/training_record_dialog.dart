@@ -4,8 +4,9 @@ import 'scrollable_dialog_content.dart';
 
 String formatTimeJst(DateTime utcTime) {
   // Convert UTC to JST by adding 9 hours
-  final jstDateTime = utcTime.add(const Duration(hours: 9));
-  return '${jstDateTime.hour.toString().padLeft(2, '0')}:${jstDateTime.minute.toString().padLeft(2, '0')}';
+  final jstHour = (utcTime.hour + 9) % 24;
+  final jstMinute = utcTime.minute;
+  return '${jstHour.toString().padLeft(2, '0')}:${jstMinute.toString().padLeft(2, '0')}';
 }
 
 class TrainingRecordDialog extends StatelessWidget {
@@ -101,8 +102,8 @@ class TrainingRecordDialog extends StatelessWidget {
                       selectedDate.year,
                       selectedDate.month,
                       selectedDate.day,
-                      4, // Fixed UTC time (13:42 JST)
-                      42,
+                      selectedDate.hour,
+                      selectedDate.minute,
                     );
                     onSave(TrainingRecord(
                       timestamp: timestamp,
