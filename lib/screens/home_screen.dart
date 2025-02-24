@@ -38,8 +38,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadDailyTotals() async {
+    if (!mounted) return;
     setState(() => _isLoading = true);
     final dailyTotals = await _workoutService.getDailyTotals(_selectedPeriod);
+    if (!mounted) return;
     setState(() {
       _dailyTotals = dailyTotals;
       _isLoading = false;
