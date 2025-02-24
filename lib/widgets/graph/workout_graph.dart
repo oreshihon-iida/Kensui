@@ -40,7 +40,7 @@ class WorkoutGraph extends StatelessWidget {
           verticalInterval: 1,
           getDrawingHorizontalLine: (value) {
             return FlLine(
-              color: Colors.grey.withOpacity(0.3),
+              color: Colors.grey.withAlpha(76),
               strokeWidth: 1,
             );
           },
@@ -104,7 +104,7 @@ class WorkoutGraph extends StatelessWidget {
             barWidth: 2,
             belowBarData: BarAreaData(
               show: true,
-              color: Theme.of(context).primaryColor.withOpacity(0.1),
+              color: Theme.of(context).primaryColor.withAlpha(26),
             ),
           ),
         ],

@@ -167,6 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         dailyTotals: _dailyTotals,
                         graphType: _selectedGraphType,
                         bodyWeight: _bodyWeight,
+                        selectedPeriod: _selectedPeriod,
                       ),
               ),
             ),
