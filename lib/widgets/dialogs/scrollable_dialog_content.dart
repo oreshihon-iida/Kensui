@@ -19,9 +19,7 @@ class ScrollableDialogContent extends StatelessWidget {
         maxHeight: maxHeight,
         minHeight: 0,
       ),
-      child: SizedBox(
-        height: maxHeight,
-        child: SingleChildScrollView(
+      child: SingleChildScrollView(
           physics: const ClampingScrollPhysics(),
           child: Padding(
             padding: padding,
