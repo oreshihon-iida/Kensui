@@ -59,10 +59,11 @@ class WorkoutGraph extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               getTitlesWidget: (value, meta) {
-                final index = dailyTotals.length - 1 - value.toInt();
-                if (index >= 0 && index < dailyTotals.length) {
+                if (value.toInt() >= 0 && value.toInt() < dailyTotals.length) {
+                  final index = dailyTotals.length - 1 - value.toInt();
+                  final date = dailyTotals[index].date;
                   return Text(
-                    dailyTotals[index].date.day.toString(),
+                    '${date.month}/${date.day}',
                     style: const TextStyle(fontSize: 12),
                   );
                 }
@@ -131,6 +132,7 @@ class WorkoutGraph extends StatelessWidget {
     if (maxValue <= 20) return 5;
     if (maxValue <= 50) return 10;
     if (maxValue <= 100) return 20;
-    return (maxValue / 10).ceil() * 10.0;
+    if (maxValue <= 500) return 50;
+    return (maxValue / 100).ceil() * 100.0;
   }
 }
