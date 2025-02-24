@@ -31,11 +31,17 @@ class WorkoutGraph extends StatelessWidget {
 
     return LineChart(
       LineChartData(
-        gridData: const FlGridData(
+        gridData: FlGridData(
           show: true,
           drawVerticalLine: true,
-          horizontalInterval: 5,
+          horizontalInterval: _calculateInterval(),
           verticalInterval: 1,
+          getDrawingHorizontalLine: (value) {
+            return FlLine(
+              color: Colors.grey.withOpacity(0.3),
+              strokeWidth: 1,
+            );
+          },
         ),
         titlesData: FlTitlesData(
           leftTitles: AxisTitles(
