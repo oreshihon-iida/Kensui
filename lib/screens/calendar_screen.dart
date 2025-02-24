@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../widgets/calendar/month_calendar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/dialogs/training_record_dialog.dart';
 import '../models/training_record.dart';
+import '../services/storage_service.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({super.key});
@@ -21,11 +23,23 @@ class _CalendarScreenState extends State<CalendarScreen> {
     _showTrainingRecordDialog(date);
   }
 
-  void _showTrainingRecordDialog(DateTime date) {
+  void _showTrainingRecordDialog(DateTime date) async {
+    final storageService = StorageService(await SharedPreferences.getInstance());
+    final allRecords = await storageService.getRecords();
+    final dayRecords = allRecords
+        .where((record) => 
+          record.timestamp.year == date.year &&
+          record.timestamp.month == date.month &&
+          record.timestamp.day == date.day)
+        .toList()
+      ..sort((a, b) => b.timestamp.compareTo(a.timestamp)); // Sort descending
+
+    if (!mounted) return;
     showDialog(
       context: context,
       builder: (context) => TrainingRecordDialog(
         selectedDate: date,
+        dayRecords: dayRecords,
         onSave: _handleSaveRecord,
       ),
     );
