@@ -1,13 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/training_record.dart';
+import '../../utils/date_formatter.dart';
 import 'scrollable_dialog_content.dart';
-
-String formatTimeJst(DateTime utcTime) {
-  // UTCからJSTに変換（+9時間）
-  final jstHour = (utcTime.hour + 9) % 24;
-  final jstMinute = utcTime.minute;
-  return '${jstHour.toString().padLeft(2, '0')}:${jstMinute.toString().padLeft(2, '0')}';
-}
 
 class TrainingRecordDialog extends StatelessWidget {
   final DateTime selectedDate;
@@ -75,7 +69,7 @@ class TrainingRecordDialog extends StatelessWidget {
               separatorBuilder: (_, __) => const Divider(),
               itemBuilder: (context, index) {
                 final record = dayRecords[index];
-                final time = formatTimeJst(record.timestamp);
+                final time = DateFormatter.formatTimeJst(record.timestamp);
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
