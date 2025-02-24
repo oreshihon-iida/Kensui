@@ -13,13 +13,24 @@ void main() {
 
     await tester.pumpWidget(MaterialApp(
       home: Builder(
-        builder: (context) => TrainingRecordDialog(
-          selectedDate: now,
-          dayRecords: records,
-          onSave: (_) {},
+        builder: (context) => Dialog(
+          child: TrainingRecordDialog(
+            selectedDate: now,
+            dayRecords: records,
+            onSave: (_) {},
+          ),
         ),
       ),
     ));
+
+    await tester.pumpAndSettle();
+
+    // Verify first record's timestamp is displayed correctly
+    expect(find.text('04:42 10回'), findsOneWidget);
+
+    // Verify last record's timestamp (50 minutes earlier)
+    final lastTime = '03:52'; // 4:42 - 50 minutes
+    expect(find.text('$lastTime 10回'), findsOneWidget);
 
     await tester.pumpAndSettle();
 
