@@ -129,7 +129,8 @@ class WorkoutGraph extends StatelessWidget {
                   (workout.count * (bodyWeight! + (workout.weightAdded ?? 0)))
                       .toDouble(),
             );
-      return FlSpot(index.toDouble(), y);
+      // X軸の値を反転（新しい日付が右側に表示）
+      return FlSpot((sortedTotals.length - 1 - index).toDouble(), y);
     });
   }
 

@@ -97,8 +97,7 @@ class TrainingRecordDialog extends StatelessWidget {
                   final repetitions = int.tryParse(repetitionsController.text);
                   if (repetitions != null && repetitions >= 0) {
                     // JST 13:42に対応するUTC 4:42を設定
-                    final jstTime = DateTime(2025, 2, 24, 13, 42);
-                    final timestamp = jstTime.subtract(const Duration(hours: 9));
+                    final timestamp = DateTime.utc(2025, 2, 24, 4, 42);
                     onSave(TrainingRecord(
                       timestamp: timestamp,
                       repetitions: repetitions,
