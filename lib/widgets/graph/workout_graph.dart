@@ -76,8 +76,7 @@ class WorkoutGraph extends StatelessWidget {
                   
                   // 日付の重複を避けるため、前の日付と比較
                   if (index == 0 || index == sortedTotals.length - 1 ||
-                      (index > 0 && (sortedTotals[index - 1].date.day != date.day ||
-                                   sortedTotals[index - 1].date.month != date.month))) {
+                      (index > 0 && sortedTotals[index - 1].date.day != date.day)) {
                     return Text(
                       '${date.month}/${date.day}',
                       style: const TextStyle(fontSize: 10),
