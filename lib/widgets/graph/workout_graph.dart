@@ -43,7 +43,7 @@ class WorkoutGraph extends StatelessWidget {
           show: true,
           drawVerticalLine: true,
           horizontalInterval: _calculateYAxisInterval(),
-          verticalInterval: 1,
+          verticalInterval: 7.0, // 週単位の目盛り
           getDrawingHorizontalLine: (value) {
             return FlLine(
               color: Colors.grey.withAlpha(76),
@@ -79,10 +79,14 @@ class WorkoutGraph extends StatelessWidget {
                 final date = DateTime.fromMillisecondsSinceEpoch(
                   (value * 24 * 60 * 60 * 1000).toInt(),
                 );
-                return Text(
-                  '${date.month.toString().padLeft(2, '0')}/${date.day.toString().padLeft(2, '0')}',
-                  style: const TextStyle(fontSize: 10),
-                );
+                // 月曜日または月初めの場合のみ表示
+                if (date.weekday == DateTime.monday || date.day == 1) {
+                  return Text(
+                    '${date.month.toString().padLeft(2, '0')}/${date.day.toString().padLeft(2, '0')}',
+                    style: const TextStyle(fontSize: 10),
+                  );
+                }
+                return const Text('');
               getTitlesWidget: (value, meta) {
                 // Convert double back to DateTime
                 final date = DateTime.fromMillisecondsSinceEpoch(
