@@ -137,12 +137,13 @@ class WorkoutGraph extends StatelessWidget {
     }).toList();
 
     final maxValue = values.reduce((a, b) => a > b ? a : b);
+    // Y軸の目盛り間隔を調整（小さい値から大きい値まで見やすく）
     if (maxValue <= 10) return 2;
-    if (maxValue <= 20) return 5;
-    if (maxValue <= 50) return 10;
-    if (maxValue <= 100) return 20;
-    if (maxValue <= 500) return 50;
-    if (maxValue <= 1000) return 100;
-    return (maxValue / 100).ceil() * 100.0;
+    if (maxValue <= 30) return 5;
+    if (maxValue <= 60) return 10;
+    if (maxValue <= 120) return 20;
+    if (maxValue <= 300) return 50;
+    if (maxValue <= 600) return 100;
+    return (maxValue / 200).ceil() * 200.0;
   }
 }
