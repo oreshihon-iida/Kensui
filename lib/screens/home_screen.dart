@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/daily_total_model.dart';
 import '../models/workout_model.dart';
 import '../services/workout_service.dart';
+import '../services/user_profile_service.dart';
+import '../widgets/graph/workout_graph.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,8 +17,11 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _repetitionsController = TextEditingController();
   String _selectedPeriod = '1month'; // デフォルト: 直近1か月
   late WorkoutService _workoutService;
+  late UserProfileService _userProfileService;
   List<DailyTotalModel> _dailyTotals = [];
   bool _isLoading = true;
+  GraphType _selectedGraphType = GraphType.count;
+  int? _bodyWeight;
 
   @override
   void initState() {
@@ -27,22 +32,38 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _initializeService() async {
     final prefs = await SharedPreferences.getInstance();
     _workoutService = WorkoutService(prefs);
+    _userProfileService = UserProfileService(prefs);
+    _bodyWeight = _userProfileService.getBodyWeight();
+    
+    // テストデータの追加（開発用）
+    final testWorkout = WorkoutModel(
+      date: DateTime.utc(2025, 2, 24, 4, 42), // UTC 04:42 -> JST 13:42
+      count: 10,
+      goalCount: 15,
+    );
+    await _workoutService.saveWorkout(testWorkout);
+    
     await _loadDailyTotals();
   }
 
   Future<void> _loadDailyTotals() async {
-    setState(() => _isLoading = true);
-    final dailyTotals = await _workoutService.getDailyTotals(_selectedPeriod);
-    setState(() {
-      _dailyTotals = dailyTotals;
-      _isLoading = false;
-    });
+    if (mounted) {
+      setState(() => _isLoading = true);
+      final dailyTotals = await _workoutService.getDailyTotals(_selectedPeriod);
+      if (mounted) {
+        setState(() {
+          _dailyTotals = dailyTotals;
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   Future<void> _saveWorkout() async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
     final count = int.tryParse(_repetitionsController.text);
     if (count == null || count <= 0) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      scaffoldMessenger.showSnackBar(
         const SnackBar(content: Text('有効な回数を入力してください')),
       );
       return;
@@ -54,10 +75,25 @@ class _HomeScreenState extends State<HomeScreen> {
       goalCount: count + 5, // 初期目標は現在の回数+5
     );
 
-    await _workoutService.saveWorkout(workout);
-    _repetitionsController.clear();
-    await _loadDailyTotals();
+    setState(() => _isLoading = true);
+    try {
+      await _workoutService.saveWorkout(workout);
+      _repetitionsController.clear();
+      await _loadDailyTotals(); // グラフを即時更新
+    } catch (e) {
+      if (mounted) {
+        scaffoldMessenger.showSnackBar(
+          const SnackBar(content: Text('記録の保存中にエラーが発生しました')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
   }
+
+
 
   @override
   void dispose() {
@@ -111,11 +147,33 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
               selected: {_selectedPeriod},
-              onSelectionChanged: (Set<String> newSelection) {
+              onSelectionChanged: (Set<String> newSelection) async {
+                if (!mounted) return;
                 setState(() {
                   _selectedPeriod = newSelection.first;
                 });
-                _loadDailyTotals();
+                await _loadDailyTotals();
+              },
+            ),
+            const SizedBox(height: 16),
+
+            // グラフ種類選択
+            SegmentedButton<GraphType>(
+              segments: const [
+                ButtonSegment(
+                  value: GraphType.count,
+                  label: Text('回数'),
+                ),
+                ButtonSegment(
+                  value: GraphType.weight,
+                  label: Text('総重量'),
+                ),
+              ],
+              selected: {_selectedGraphType},
+              onSelectionChanged: (Set<GraphType> newSelection) {
+                setState(() {
+                  _selectedGraphType = newSelection.first;
+                });
               },
             ),
             const SizedBox(height: 16),
@@ -130,9 +188,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(8),
                 child: _isLoading
                     ? const Center(child: CircularProgressIndicator())
-                    : _dailyTotals.isEmpty
-                        ? const Center(child: Text('記録がありません'))
-                        : const Center(child: Text('グラフ表示エリア')),
+                    : WorkoutGraph(
+                        dailyTotals: _dailyTotals,
+                        graphType: _selectedGraphType,
+                        bodyWeight: _bodyWeight,
+                        selectedPeriod: _selectedPeriod,
+                      ),
               ),
             ),
           ],

@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../models/training_record.dart';
+import '../../utils/date_formatter.dart';
 import 'scrollable_dialog_content.dart';
-
-String formatTimeJst(DateTime utcTime) {
-  final jst = utcTime.add(const Duration(hours: 9));
-  return '${jst.hour.toString().padLeft(2, '0')}:${jst.minute.toString().padLeft(2, '0')}';
-}
 
 class TrainingRecordDialog extends StatelessWidget {
   final DateTime selectedDate;
@@ -73,7 +69,8 @@ class TrainingRecordDialog extends StatelessWidget {
               separatorBuilder: (_, __) => const Divider(),
               itemBuilder: (context, index) {
                 final record = dayRecords[index];
-                final time = formatTimeJst(record.timestamp);
+                final jst = DateFormatter.toJst(record.timestamp);
+                final time = '${jst.hour.toString().padLeft(2, '0')}:${jst.minute.toString().padLeft(2, '0')}';
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
@@ -95,15 +92,14 @@ class TrainingRecordDialog extends StatelessWidget {
                 onPressed: () {
                   final repetitions = int.tryParse(repetitionsController.text);
                   if (repetitions != null && repetitions >= 0) {
-                    final now = DateTime.now().toUtc();
-                    // Convert current time to JST for display
-                    final jst = now.add(const Duration(hours: 9));
+                    // 選択された日付と現在時刻を使用
+                    final now = DateTime.now();
                     final timestamp = DateTime.utc(
                       selectedDate.year,
                       selectedDate.month,
                       selectedDate.day,
-                      jst.hour,
-                      jst.minute,
+                      now.hour,
+                      now.minute,
                     );
                     onSave(TrainingRecord(
                       timestamp: timestamp,

@@ -19,14 +19,19 @@ class WorkoutService {
   // 全てのワークアウトを取得
   Future<List<WorkoutModel>> getWorkouts() async {
     final workoutsJson = _prefs.getStringList(_workoutsKey) ?? [];
-    return workoutsJson
-        .map((json) => WorkoutModel.fromJson(jsonDecode(json)))
-        .toList();
+    try {
+      return workoutsJson
+          .map((json) => WorkoutModel.fromJson(jsonDecode(json)))
+          .toList();
+    } catch (e) {
+      return []; // エラー時は空のリストを返す
+    }
   }
 
   // 指定期間のワークアウトを取得
   Future<List<WorkoutModel>> getWorkoutsByPeriod(String period) async {
     final workouts = await getWorkouts();
+
     final now = DateTime.now();
     
     switch (period) {
@@ -45,6 +50,7 @@ class WorkoutService {
   // 日別の集計データを取得
   Future<List<DailyTotalModel>> getDailyTotals(String period) async {
     final workouts = await getWorkoutsByPeriod(period);
+
     final Map<DateTime, List<WorkoutModel>> workoutsByDate = {};
     
     for (var workout in workouts) {
@@ -52,10 +58,12 @@ class WorkoutService {
       workoutsByDate[date] = [...(workoutsByDate[date] ?? []), workout];
     }
 
-    return workoutsByDate.entries
+    final dailyTotals = workoutsByDate.entries
         .map((e) => DailyTotalModel(date: e.key, workouts: e.value))
         .toList()
-        ..sort((a, b) => a.date.compareTo(b.date));
+      ..sort((a, b) => a.date.compareTo(b.date));
+
+    return dailyTotals;
   }
 
   // ワークアウトリストを保存
