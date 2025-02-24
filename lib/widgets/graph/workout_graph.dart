@@ -42,9 +42,8 @@ class WorkoutGraph extends StatelessWidget {
         gridData: FlGridData(
           show: true,
           drawVerticalLine: true,
-          horizontalInterval: _calculateInterval(),
+          horizontalInterval: _calculateYAxisInterval(),
           verticalInterval: 1,
-          drawHorizontalLine: true,
           getDrawingHorizontalLine: (value) {
             return FlLine(
               color: Colors.grey.withAlpha(76),
@@ -75,19 +74,15 @@ class WorkoutGraph extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 30,
-              interval: 1, // 日単位の目盛り
+              interval: 7.0, // 週単位の目盛り
               getTitlesWidget: (value, meta) {
                 final date = DateTime.fromMillisecondsSinceEpoch(
                   (value * 24 * 60 * 60 * 1000).toInt(),
                 );
-                // 月曜日または月初めの場合のみ表示
-                if (date.weekday == DateTime.monday || date.day == 1) {
-                  return Text(
-                    '${date.month.toString().padLeft(2, '0')}/${date.day.toString().padLeft(2, '0')}',
-                    style: const TextStyle(fontSize: 10),
-                  );
-                }
-                return const Text('');
+                return Text(
+                  '${date.month.toString().padLeft(2, '0')}/${date.day.toString().padLeft(2, '0')}',
+                  style: const TextStyle(fontSize: 10),
+                );
               getTitlesWidget: (value, meta) {
                 // Convert double back to DateTime
                 final date = DateTime.fromMillisecondsSinceEpoch(
@@ -179,7 +174,7 @@ class WorkoutGraph extends StatelessWidget {
     return filteredData;
   }
 
-  double _calculateInterval() {
+  double _calculateYAxisInterval() {
     if (dailyTotals.isEmpty) return 5;
 
     final values = dailyTotals.map((total) {
