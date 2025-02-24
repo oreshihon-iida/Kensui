@@ -61,9 +61,10 @@ class _HomeScreenState extends State<HomeScreen> {
       goalCount: count + 5, // 初期目標は現在の回数+5
     );
 
+    setState(() => _isLoading = true);
     await _workoutService.saveWorkout(workout);
     _repetitionsController.clear();
-    await _loadDailyTotals();
+    await _loadDailyTotals(); // Ensure graph updates
   }
 
   @override
