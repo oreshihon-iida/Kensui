@@ -43,10 +43,10 @@ class WorkoutGraph extends StatelessWidget {
               graphType == GraphType.count ? '回数' : '総重量 (kg)',
               style: const TextStyle(fontSize: 12),
             ),
-            sideTitles: const SideTitles(
+            sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 40,
-              interval: 5,
+              interval: _calculateInterval(),
             ),
           ),
           bottomTitles: AxisTitles(
@@ -101,6 +101,28 @@ class WorkoutGraph extends StatelessWidget {
                       .toDouble(),
             );
       return FlSpot(index.toDouble(), y);
-    });
+    }).reversed.toList();
+  }
+
+  double _calculateInterval() {
+    if (dailyTotals.isEmpty) return 5;
+
+    final values = dailyTotals.map((total) {
+      return graphType == GraphType.count
+          ? total.totalCount.toDouble()
+          : total.workouts.fold<double>(
+              0,
+              (sum, workout) =>
+                  sum +
+                  (workout.count * (bodyWeight! + (workout.weightAdded ?? 0)))
+                      .toDouble(),
+            );
+    }).toList();
+
+    final maxValue = values.reduce((a, b) => a > b ? a : b);
+    if (maxValue <= 20) return 5;
+    if (maxValue <= 50) return 10;
+    if (maxValue <= 100) return 20;
+    return (maxValue / 5).ceil().toDouble();
   }
 }
