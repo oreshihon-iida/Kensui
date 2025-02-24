@@ -65,20 +65,18 @@ class WorkoutGraph extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 30,
-              interval: 1,
+              interval: 2, // 日付の表示間隔を調整
               getTitlesWidget: (value, meta) {
-                final index = dailyTotals.length - 1 - value.toInt();
+                final index = value.toInt();
                 if (index >= 0 && index < dailyTotals.length) {
-                  final date = dailyTotals[index].date;
-                  // 日付の重複を避けるため、前の日付と比較
-                  if (value.toInt() == 0 || value.toInt() == dailyTotals.length - 1 ||
-                      (index > 0 && (dailyTotals[index - 1].date.day != date.day ||
-                                   dailyTotals[index - 1].date.month != date.month))) {
-                    return Text(
-                      '${date.month}/${date.day}',
-                      style: const TextStyle(fontSize: 10),
-                    );
-                  }
+                  // 日付順（新しい順）にソート
+                  final sortedTotals = List<DailyTotalModel>.from(dailyTotals)
+                    ..sort((a, b) => b.date.compareTo(a.date));
+                  final date = sortedTotals[index].date;
+                  return Text(
+                    '${date.month}/${date.day}',
+                    style: const TextStyle(fontSize: 10),
+                  );
                 }
                 return const Text('');
               },
