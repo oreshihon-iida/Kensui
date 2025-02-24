@@ -151,13 +151,16 @@ class WorkoutGraph extends StatelessWidget {
         final oneMonthAgo = DateTime(now.year, now.month - 1, 1);
         filteredData.removeWhere((total) => 
           total.date.isBefore(oneMonthAgo) || total.date.isAfter(currentMonthStart.add(const Duration(days: 31))));
+        break;
       case '3months':
         // 現在の月の1日から過去3か月
         final currentMonthStart = DateTime(now.year, now.month, 1);
         final threeMonthsAgo = DateTime(now.year, now.month - 3, 1);
         filteredData.removeWhere((total) => 
           total.date.isBefore(threeMonthsAgo) || total.date.isAfter(currentMonthStart.add(const Duration(days: 31))));
+        break;
       case 'all':
+      default:
         // データが存在する最古の日から現在の月末まで
         final currentMonthEnd = DateTime(now.year, now.month + 1, 0);
         filteredData.removeWhere((total) => total.date.isAfter(currentMonthEnd));
