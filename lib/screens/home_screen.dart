@@ -49,10 +49,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadDailyTotals() async {
     if (mounted) {
-      print('Debug: Loading daily totals for period: $_selectedPeriod');
       setState(() => _isLoading = true);
       final dailyTotals = await _workoutService.getDailyTotals(_selectedPeriod);
-      print('Debug: Loaded ${dailyTotals.length} daily totals');
       if (mounted) {
         setState(() {
           _dailyTotals = dailyTotals;
@@ -96,29 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _handleTrainingRecord(TrainingRecord record) async {
-    setState(() => _isLoading = true);
-    try {
-      // TrainingRecordをWorkoutModelに変換
-      final workout = WorkoutModel(
-        date: record.timestamp,
-        count: record.repetitions,
-        goalCount: record.repetitions + 5, // 初期目標値は現在の回数+5
-      );
-      await _workoutService.saveWorkout(workout);
-      await _loadDailyTotals(); // グラフを即時更新
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('記録の保存中にエラーが発生しました')),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
-    }
-  }
+
 
   @override
   void dispose() {

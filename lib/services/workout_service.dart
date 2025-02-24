@@ -19,16 +19,11 @@ class WorkoutService {
   // 全てのワークアウトを取得
   Future<List<WorkoutModel>> getWorkouts() async {
     final workoutsJson = _prefs.getStringList(_workoutsKey) ?? [];
-    print('Debug: Found ${workoutsJson.length} workouts in SharedPreferences');
-    
     try {
-      final workouts = workoutsJson
+      return workoutsJson
           .map((json) => WorkoutModel.fromJson(jsonDecode(json)))
           .toList();
-      print('Debug: Parsed ${workouts.length} valid workout records');
-      return workouts;
     } catch (e) {
-      print('Error parsing workouts: $e');
       return []; // エラー時は空のリストを返す
     }
   }
@@ -36,7 +31,7 @@ class WorkoutService {
   // 指定期間のワークアウトを取得
   Future<List<WorkoutModel>> getWorkoutsByPeriod(String period) async {
     final workouts = await getWorkouts();
-    print('Debug: Filtering ${workouts.length} workouts for period: $period');
+
     final now = DateTime.now();
     
     switch (period) {
@@ -55,7 +50,7 @@ class WorkoutService {
   // 日別の集計データを取得
   Future<List<DailyTotalModel>> getDailyTotals(String period) async {
     final workouts = await getWorkoutsByPeriod(period);
-    print('Debug: Aggregating ${workouts.length} workouts into daily totals');
+
     final Map<DateTime, List<WorkoutModel>> workoutsByDate = {};
     
     for (var workout in workouts) {
@@ -67,7 +62,7 @@ class WorkoutService {
         .map((e) => DailyTotalModel(date: e.key, workouts: e.value))
         .toList()
       ..sort((a, b) => a.date.compareTo(b.date));
-    print('Debug: Generated ${dailyTotals.length} daily total records');
+
     return dailyTotals;
   }
 
