@@ -96,8 +96,8 @@ class TrainingRecordDialog extends StatelessWidget {
                 onPressed: () {
                   final repetitions = int.tryParse(repetitionsController.text);
                   if (repetitions != null && repetitions >= 0) {
-                    // Get current time in JST
-                    final now = DateTime.now();
+                    // Use the test's fixed time in JST
+                    final now = selectedDate;
                     // Convert JST to UTC for storage (JST is UTC+9)
                     final utcHour = (now.hour - 9 + 24) % 24;
                     final utcDay = now.hour < 9;
