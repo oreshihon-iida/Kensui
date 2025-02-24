@@ -14,14 +14,9 @@ class ScrollableDialogContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final height = constraints.maxHeight.isFinite ? 
-          constraints.maxHeight : 
-          maxHeight.clamp(0.0, MediaQuery.of(context).size.height * 0.7);
-        return SizedBox(
-          height: height,
-          child: SingleChildScrollView(
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: maxHeight),
+      child: SingleChildScrollView(
         physics: const ClampingScrollPhysics(),
         child: Padding(
           padding: padding,
@@ -32,8 +27,6 @@ class ScrollableDialogContent extends StatelessWidget {
           ),
         ),
       ),
-        );
-      },
     );
   }
 }

@@ -7,10 +7,15 @@ void main() {
     const maxHeight = 300.0;
     
     await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: ScrollableDialogContent(
-          maxHeight: maxHeight,
-          children: List.generate(20, (i) => Text('Item $i')),
+      home: Material(
+        child: Center(
+          child: SizedBox(
+            height: maxHeight,
+            child: ScrollableDialogContent(
+              maxHeight: maxHeight,
+              children: List.generate(20, (i) => Text('Item $i')),
+            ),
+          ),
         ),
       ),
     ));
