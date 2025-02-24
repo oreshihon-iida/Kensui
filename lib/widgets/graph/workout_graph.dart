@@ -69,17 +69,22 @@ class WorkoutGraph extends StatelessWidget {
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
                 if (index >= 0 && index < dailyTotals.length) {
-                  final currentDate = dailyTotals[dailyTotals.length - 1 - index].date;
-                  if (index > 0) {
-                    final prevDate = dailyTotals[dailyTotals.length - index].date;
-                    if (prevDate.day == currentDate.day && prevDate.month == currentDate.month) {
-                      return const Text('');
+                  final date = dailyTotals[dailyTotals.length - 1 - index].date;
+                  // Only show date if it's the first occurrence
+                  bool showDate = true;
+                  for (int i = 0; i < index; i++) {
+                    final prevDate = dailyTotals[dailyTotals.length - 1 - i].date;
+                    if (prevDate.day == date.day && prevDate.month == date.month) {
+                      showDate = false;
+                      break;
                     }
                   }
-                  return Text(
-                    '${currentDate.month}/${currentDate.day}',
-                    style: const TextStyle(fontSize: 10),
-                  );
+                  return showDate
+                      ? Text(
+                          '${date.month}/${date.day}',
+                          style: const TextStyle(fontSize: 10),
+                        )
+                      : const Text('');
                 }
                 return const Text('');
               },
