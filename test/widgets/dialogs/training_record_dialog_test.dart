@@ -8,7 +8,7 @@ void main() {
     final now = DateTime(2025, 2, 24, 4, 42); // Fixed timestamp
     final records = List.generate(50, (i) => TrainingRecord(
       timestamp: now.subtract(Duration(minutes: i)),
-      repetitions: 10 + i,
+      repetitions: 10,
     ));
 
     await tester.pumpWidget(MaterialApp(
