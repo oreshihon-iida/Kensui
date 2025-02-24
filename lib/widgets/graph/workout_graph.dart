@@ -69,22 +69,19 @@ class WorkoutGraph extends StatelessWidget {
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
                 if (index >= 0 && index < dailyTotals.length) {
-                  final currentDate = dailyTotals[dailyTotals.length - 1 - index].date;
+                  // 日付順（古い順）にソート
+                  final sortedTotals = List<DailyTotalModel>.from(dailyTotals)
+                    ..sort((a, b) => a.date.compareTo(b.date));
+                  final date = sortedTotals[index].date;
+                  
                   // 日付の重複を避けるため、前の日付と比較
-                  if (index == 0 || index == dailyTotals.length - 1) {
-                    // 最初と最後の日付は必ず表示
+                  if (index == 0 || index == sortedTotals.length - 1 ||
+                      (index > 0 && (sortedTotals[index - 1].date.day != date.day ||
+                                   sortedTotals[index - 1].date.month != date.month))) {
                     return Text(
-                      '${currentDate.month}/${currentDate.day}',
+                      '${date.month}/${date.day}',
                       style: const TextStyle(fontSize: 10),
                     );
-                  } else {
-                    final prevDate = dailyTotals[dailyTotals.length - index].date;
-                    if (currentDate.day != prevDate.day || currentDate.month != prevDate.month) {
-                      return Text(
-                        '${currentDate.month}/${currentDate.day}',
-                        style: const TextStyle(fontSize: 10),
-                      );
-                    }
                   }
                 }
                 return const Text('');
@@ -117,8 +114,12 @@ class WorkoutGraph extends StatelessWidget {
   }
 
   List<FlSpot> _createDataPoints() {
-    final points = List.generate(dailyTotals.length, (index) {
-      final total = dailyTotals[index];
+    // 日付順（古い順）にソート
+    final sortedTotals = List<DailyTotalModel>.from(dailyTotals)
+      ..sort((a, b) => a.date.compareTo(b.date));
+    
+    return List.generate(sortedTotals.length, (index) {
+      final total = sortedTotals[index];
       final y = graphType == GraphType.count
           ? total.totalCount.toDouble()
           : total.workouts.fold<double>(
@@ -128,9 +129,8 @@ class WorkoutGraph extends StatelessWidget {
                   (workout.count * (bodyWeight! + (workout.weightAdded ?? 0)))
                       .toDouble(),
             );
-      return FlSpot((dailyTotals.length - 1 - index).toDouble(), y);
+      return FlSpot(index.toDouble(), y);
     });
-    return points;
   }
 
   double _calculateInterval() {
