@@ -67,21 +67,16 @@ class WorkoutGraph extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 30,
+              interval: 7, // 週単位で表示
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
                 final filteredData = _filterDataByPeriod();
                 if (index >= 0 && index < filteredData.length) {
                   final date = filteredData[index].date;
-                  // 週の始まり（月曜日）を基準に表示、かつ月初めと月末も表示
-                  final weekday = date.weekday;
-                  final isMonthStart = date.day == 1;
-                  final isMonthEnd = date.day == DateTime(date.year, date.month + 1, 0).day;
-                  if (weekday == DateTime.monday || isMonthStart || isMonthEnd || index == filteredData.length - 1) {
-                    return Text(
-                      '${date.month.toString().padLeft(2, '0')}/${date.day.toString().padLeft(2, '0')}',
-                      style: const TextStyle(fontSize: 10),
-                    );
-                  }
+                  return Text(
+                    '${date.month.toString().padLeft(2, '0')}/${date.day.toString().padLeft(2, '0')}',
+                    style: const TextStyle(fontSize: 10),
+                  );
                 }
                 return const Text('');
               },
