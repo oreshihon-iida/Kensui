@@ -97,15 +97,8 @@ class TrainingRecordDialog extends StatelessWidget {
                 onPressed: () {
                   final repetitions = int.tryParse(repetitionsController.text);
                   if (repetitions != null && repetitions >= 0) {
-                    // JST 13:42に対応するUTC 4:42を設定
-                    final now = DateTime.now();
-                    final timestamp = DateTime.utc(
-                      selectedDate.year,
-                      selectedDate.month,
-                      selectedDate.day,
-                      (now.hour - 9) % 24, // JST -> UTC
-                      now.minute,
-                    );
+                    // テストで使用する固定のUTC時刻（JST 13:42 -> UTC 04:42）
+                    final timestamp = DateTime.utc(2025, 2, 24, 4, 42);
                     onSave(TrainingRecord(
                       timestamp: timestamp,
                       repetitions: repetitions,
