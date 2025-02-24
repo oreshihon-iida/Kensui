@@ -20,14 +20,13 @@ class ScrollableDialogContent extends StatelessWidget {
         minHeight: 0,
       ),
       child: SingleChildScrollView(
-          physics: const ClampingScrollPhysics(),
-          child: Padding(
-            padding: padding,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: children,
-            ),
+        physics: const ClampingScrollPhysics(),
+        child: Padding(
+          padding: padding,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: children,
           ),
         ),
       ),
