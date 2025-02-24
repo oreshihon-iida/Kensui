@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/daily_total_model.dart';
 import '../models/workout_model.dart';
 import '../services/workout_service.dart';
+import '../services/user_profile_service.dart';
+import '../widgets/graph/workout_graph.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,8 +17,11 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _repetitionsController = TextEditingController();
   String _selectedPeriod = '1month'; // デフォルト: 直近1か月
   late WorkoutService _workoutService;
+  late UserProfileService _userProfileService;
   List<DailyTotalModel> _dailyTotals = [];
   bool _isLoading = true;
+  GraphType _selectedGraphType = GraphType.count;
+  int? _bodyWeight;
 
   @override
   void initState() {
@@ -27,6 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _initializeService() async {
     final prefs = await SharedPreferences.getInstance();
     _workoutService = WorkoutService(prefs);
+    _userProfileService = UserProfileService(prefs);
+    _bodyWeight = _userProfileService.getBodyWeight();
     await _loadDailyTotals();
   }
 
@@ -120,6 +127,27 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 16),
 
+            // グラフ種類選択
+            SegmentedButton<GraphType>(
+              segments: const [
+                ButtonSegment(
+                  value: GraphType.count,
+                  label: Text('回数'),
+                ),
+                ButtonSegment(
+                  value: GraphType.weight,
+                  label: Text('総重量'),
+                ),
+              ],
+              selected: {_selectedGraphType},
+              onSelectionChanged: (Set<GraphType> newSelection) {
+                setState(() {
+                  _selectedGraphType = newSelection.first;
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+
             // グラフ表示エリア
             Expanded(
               child: Container(
@@ -130,9 +158,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(8),
                 child: _isLoading
                     ? const Center(child: CircularProgressIndicator())
-                    : _dailyTotals.isEmpty
-                        ? const Center(child: Text('記録がありません'))
-                        : const Center(child: Text('グラフ表示エリア')),
+                    : WorkoutGraph(
+                        dailyTotals: _dailyTotals,
+                        graphType: _selectedGraphType,
+                        bodyWeight: _bodyWeight,
+                      ),
               ),
             ),
           ],
