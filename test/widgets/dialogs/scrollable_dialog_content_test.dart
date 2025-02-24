@@ -46,8 +46,8 @@ void main() {
   testWidgets('ScrollableDialogContent applies padding correctly', (WidgetTester tester) async {
     const padding = EdgeInsets.all(24.0);
     
-    await tester.pumpWidget(MaterialApp(
-      home: const Scaffold(
+    await tester.pumpWidget(const MaterialApp(
+      home: Scaffold(
         body: ScrollableDialogContent(
           padding: padding,
           children: [Text('Test')],
