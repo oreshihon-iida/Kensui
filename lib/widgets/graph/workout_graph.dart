@@ -85,6 +85,7 @@ class WorkoutGraph extends StatelessWidget {
                 }
                 return const Text('');
               },
+              interval: 2, // 日付の表示間隔を調整
             ),
           ),
           rightTitles: const AxisTitles(
@@ -150,12 +151,12 @@ class WorkoutGraph extends StatelessWidget {
     final maxValue = values.reduce((a, b) => a > b ? a : b);
     // Y軸の目盛り間隔を調整（小さい値から大きい値まで見やすく）
     if (maxValue <= 10) return 2;
-    if (maxValue <= 20) return 4;
-    if (maxValue <= 50) return 5;
-    if (maxValue <= 100) return 10;
-    if (maxValue <= 200) return 20;
-    if (maxValue <= 500) return 50;
-    if (maxValue <= 1000) return 100;
-    return (maxValue / 500).ceil() * 500.0;
+    if (maxValue <= 20) return 5;
+    if (maxValue <= 50) return 10;
+    if (maxValue <= 100) return 20;
+    if (maxValue <= 200) return 50;
+    if (maxValue <= 500) return 100;
+    if (maxValue <= 1000) return 200;
+    return (maxValue / 1000).ceil() * 1000.0;
   }
 }
