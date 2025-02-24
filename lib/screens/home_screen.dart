@@ -132,11 +132,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
               selected: {_selectedPeriod},
-              onSelectionChanged: (Set<String> newSelection) {
+              onSelectionChanged: (Set<String> newSelection) async {
+                if (!mounted) return;
                 setState(() {
                   _selectedPeriod = newSelection.first;
                 });
-                _loadDailyTotals();
+                await _loadDailyTotals();
               },
             ),
             const SizedBox(height: 16),
