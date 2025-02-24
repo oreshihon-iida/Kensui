@@ -32,6 +32,7 @@ class WorkoutGraph extends StatelessWidget {
     }
 
     final sortedTotals = _filterDataByPeriod();
+    // 過去（左）から現在（右）の順序でX軸を設定
     final minX = sortedTotals.first.date.millisecondsSinceEpoch.toDouble() / (24 * 60 * 60 * 1000);
     final maxX = sortedTotals.last.date.millisecondsSinceEpoch.toDouble() / (24 * 60 * 60 * 1000);
 
@@ -189,7 +190,7 @@ class WorkoutGraph extends StatelessWidget {
         break;
     }
     
-    // 日付でソート（古い順）
+    // 日付でソート（古い順 = 左から右）
     filteredData.sort((a, b) => a.date.compareTo(b.date));
     return filteredData;
   }
