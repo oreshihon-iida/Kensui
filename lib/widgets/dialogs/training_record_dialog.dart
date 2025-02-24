@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/training_record.dart';
+import 'scrollable_dialog_content.dart';
 
 class TrainingRecordDialog extends StatelessWidget {
   final DateTime selectedDate;
