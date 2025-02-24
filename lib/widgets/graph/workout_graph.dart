@@ -43,11 +43,27 @@ class WorkoutGraph extends StatelessWidget {
           show: true,
           drawVerticalLine: true,
           horizontalInterval: _calculateYAxisInterval(),
-          verticalInterval: 7.0, // 週単位の目盛り
+          verticalInterval: 1.0, // 日単位の目盛り（表示は週単位）
           getDrawingHorizontalLine: (value) {
             return FlLine(
               color: Colors.grey.withAlpha(76),
               strokeWidth: 1,
+            );
+          },
+          getDrawingVerticalLine: (value) {
+            final date = DateTime.fromMillisecondsSinceEpoch(
+              (value * 24 * 60 * 60 * 1000).toInt(),
+            );
+            // 週の境界と月の境界に目盛り線を表示
+            if (date.weekday == DateTime.monday || date.day == 1) {
+              return FlLine(
+                color: Colors.grey.withAlpha(76),
+                strokeWidth: 1,
+              );
+            }
+            return FlLine(
+              color: Colors.grey.withAlpha(30),
+              strokeWidth: 0.5,
             );
           },
         ),
@@ -70,10 +86,11 @@ class WorkoutGraph extends StatelessWidget {
             ),
           ),
           bottomTitles: AxisTitles(
+            axisNameSize: 20,
             sideTitles: SideTitles(
               showTitles: true,
-              reservedSize: 30,
-              interval: 7.0, // 週単位の目盛り
+              reservedSize: 40,
+              interval: 1.0, // 日単位の目盛りに変更（表示条件は getTitlesWidget で制御）
               getTitlesWidget: (value, meta) {
                 final date = DateTime.fromMillisecondsSinceEpoch(
                   (value * 24 * 60 * 60 * 1000).toInt(),
@@ -85,7 +102,10 @@ class WorkoutGraph extends StatelessWidget {
                     date.isAtSameMomentAs(sortedTotals.last.date)) {
                   return Text(
                     '${date.month.toString().padLeft(2, '0')}/${date.day.toString().padLeft(2, '0')}',
-                    style: const TextStyle(fontSize: 10),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
                   );
                 }
                 return const Text('');
