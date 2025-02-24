@@ -43,7 +43,7 @@ class WorkoutGraph extends StatelessWidget {
           show: true,
           drawVerticalLine: true,
           horizontalInterval: _calculateInterval(),
-          verticalInterval: 1,
+          verticalInterval: 7.0,
           getDrawingHorizontalLine: (value) {
             return FlLine(
               color: Colors.grey.withAlpha(76),
@@ -74,7 +74,7 @@ class WorkoutGraph extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 30,
-              interval: (maxX - minX) / sortedTotals.length * 7, // 週単位の目盛り
+              interval: 7.0, // 週単位の目盛り
               reservedSize: 30,
               getTitlesWidget: (value, meta) {
                 final date = DateTime.fromMillisecondsSinceEpoch(
