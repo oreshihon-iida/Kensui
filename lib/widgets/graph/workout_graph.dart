@@ -116,9 +116,9 @@ class WorkoutGraph extends StatelessWidget {
   }
 
   List<FlSpot> _createDataPoints() {
-    // 日付順（新しい順）にソート
+    // 日付順（古い順）にソート
     final sortedTotals = List<DailyTotalModel>.from(dailyTotals)
-      ..sort((a, b) => b.date.compareTo(a.date));
+      ..sort((a, b) => a.date.compareTo(b.date));
     
     return List.generate(sortedTotals.length, (index) {
       final total = sortedTotals[index];
@@ -132,7 +132,7 @@ class WorkoutGraph extends StatelessWidget {
                       .toDouble(),
             );
       // X軸の値を反転（新しい日付が右側に表示）
-      return FlSpot(index.toDouble(), y);
+      return FlSpot((sortedTotals.length - 1 - index).toDouble(), y);
     });
   }
 
@@ -154,11 +154,12 @@ class WorkoutGraph extends StatelessWidget {
     final maxValue = values.reduce((a, b) => a > b ? a : b);
     // Y軸の目盛り間隔を調整（小さい値から大きい値まで見やすく）
     if (maxValue <= 10) return 2;
-    if (maxValue <= 30) return 5;
-    if (maxValue <= 60) return 10;
-    if (maxValue <= 120) return 20;
-    if (maxValue <= 300) return 50;
-    if (maxValue <= 600) return 100;
-    return (maxValue / 200).ceil() * 200.0;
+    if (maxValue <= 20) return 4;
+    if (maxValue <= 50) return 5;
+    if (maxValue <= 100) return 10;
+    if (maxValue <= 200) return 20;
+    if (maxValue <= 500) return 50;
+    if (maxValue <= 1000) return 100;
+    return (maxValue / 500).ceil() * 500.0;
   }
 }
