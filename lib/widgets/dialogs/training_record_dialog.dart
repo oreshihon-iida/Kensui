@@ -4,7 +4,6 @@ import 'scrollable_dialog_content.dart';
 
 String formatTimeJst(DateTime utcTime) {
   final jstHour = (utcTime.hour + 9) % 24;
-  final jstDay = utcTime.hour + 9 >= 24;
   return '${jstHour.toString().padLeft(2, '0')}:${utcTime.minute.toString().padLeft(2, '0')}';
 }
 
