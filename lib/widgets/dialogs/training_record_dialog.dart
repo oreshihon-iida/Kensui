@@ -98,8 +98,9 @@ class TrainingRecordDialog extends StatelessWidget {
                     // Get current time in JST
                     final now = DateTime.now();
                     // Convert JST to UTC for storage
-                    final utcHour = (now.hour - 9 + 24) % 24;
-                    final utcDay = now.hour - 9 < 0;
+                    final jstHour = now.hour;
+                    final utcHour = (jstHour - 9 + 24) % 24;
+                    final utcDay = jstHour - 9 < 0;
                     final timestamp = DateTime.utc(
                       selectedDate.year,
                       selectedDate.month,
