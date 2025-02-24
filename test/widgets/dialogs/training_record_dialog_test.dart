@@ -27,7 +27,9 @@ void main() {
     expect(find.byType(AlertDialog), findsOneWidget);
     
     // Should show records in descending order
-    expect(find.text('${records.first.repetitions}回'), findsOneWidget);
+    final firstRecord = records.first;
+    final time = '${firstRecord.timestamp.hour.toString().padLeft(2, '0')}:${firstRecord.timestamp.minute.toString().padLeft(2, '0')}';
+    expect(find.text('$time ${firstRecord.repetitions}回'), findsOneWidget);
     
     // Should be able to scroll
     await tester.drag(find.byType(ListView), const Offset(0, -500));

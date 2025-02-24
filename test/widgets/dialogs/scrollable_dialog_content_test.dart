@@ -17,7 +17,7 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    final box = tester.renderObject<RenderBox>(find.byType(ConstrainedBox));
+    final box = tester.renderObject<RenderBox>(find.byType(ConstrainedBox).first);
     expect(box.size.height, lessThanOrEqualTo(maxHeight));
   });
 
