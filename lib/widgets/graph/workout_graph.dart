@@ -70,21 +70,10 @@ class WorkoutGraph extends StatelessWidget {
                 final index = value.toInt();
                 if (index >= 0 && index < dailyTotals.length) {
                   final date = dailyTotals[dailyTotals.length - 1 - index].date;
-                  // Only show date if it's the first occurrence
-                  bool showDate = true;
-                  for (int i = 0; i < index; i++) {
-                    final prevDate = dailyTotals[dailyTotals.length - 1 - i].date;
-                    if (prevDate.day == date.day && prevDate.month == date.month) {
-                      showDate = false;
-                      break;
-                    }
-                  }
-                  return showDate
-                      ? Text(
-                          '${date.month}/${date.day}',
-                          style: const TextStyle(fontSize: 10),
-                        )
-                      : const Text('');
+                  return Text(
+                    '${date.month}/${date.day}',
+                    style: const TextStyle(fontSize: 10),
+                  );
                 }
                 return const Text('');
               },
@@ -148,10 +137,12 @@ class WorkoutGraph extends StatelessWidget {
     }).toList();
 
     final maxValue = values.reduce((a, b) => a > b ? a : b);
+    if (maxValue <= 10) return 2;
     if (maxValue <= 20) return 5;
     if (maxValue <= 50) return 10;
     if (maxValue <= 100) return 20;
     if (maxValue <= 500) return 50;
+    if (maxValue <= 1000) return 100;
     return (maxValue / 100).ceil() * 100.0;
   }
 }
