@@ -25,12 +25,17 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    // Verify first record's timestamp is displayed correctly
+    // Verify first record is visible
     expect(find.text('04:42 10回'), findsOneWidget);
 
-    // Verify last record's timestamp (50 minutes earlier)
-    final lastTime = '03:52'; // 4:42 - 50 minutes
-    expect(find.text('$lastTime 10回'), findsOneWidget);
+    // Verify scrolling works
+    await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -500));
+    await tester.pumpAndSettle();
+
+    // Verify last record is visible
+    final lastRecord = records.last;
+    final lastTime = '${lastRecord.timestamp.hour.toString().padLeft(2, '0')}:${lastRecord.timestamp.minute.toString().padLeft(2, '0')}';
+    expect(find.text('$lastTime ${lastRecord.repetitions}回'), findsOneWidget);
 
     await tester.pumpAndSettle();
 
