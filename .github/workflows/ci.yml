@@ -64,8 +64,13 @@ jobs:
         run: |
           flutter config --android-sdk $ANDROID_SDK_ROOT
           flutter doctor -v
+          flutter clean
+          cd android
+          ./gradlew clean
+          cd ..
         
       - name: Build Android
         run: |
+          flutter build apk --debug # まずdebugビルドを試す
           flutter build apk --release
           flutter build appbundle --release

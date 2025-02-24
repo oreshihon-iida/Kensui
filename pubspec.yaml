@@ -5,7 +5,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.2.3 <4.0.0'
+  sdk: '>=3.3.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -17,7 +17,6 @@ dependencies:
   provider: ^6.1.1
   path_provider: ^2.0.15
   path_provider_android: ^2.2.4
-  sensors_plus: ^3.1.0
 
 dev_dependencies:
   flutter_test:
