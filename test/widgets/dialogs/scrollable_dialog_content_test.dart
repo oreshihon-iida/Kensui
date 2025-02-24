@@ -47,10 +47,10 @@ void main() {
     const padding = EdgeInsets.all(24.0);
     
     await tester.pumpWidget(MaterialApp(
-      home: Scaffold(
+      home: const Scaffold(
         body: ScrollableDialogContent(
           padding: padding,
-          children: const [Text('Test')],
+          children: [Text('Test')],
         ),
       ),
     ));
