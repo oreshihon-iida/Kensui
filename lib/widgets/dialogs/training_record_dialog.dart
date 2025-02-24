@@ -92,14 +92,14 @@ class TrainingRecordDialog extends StatelessWidget {
                   final repetitions = int.tryParse(repetitionsController.text);
                   if (repetitions != null && repetitions >= 0) {
                     // 選択された日付を使用し、現在時刻をJSTで取得
-                    final now = DateTime.now().add(const Duration(hours: 9));
-                    final timestamp = DateTime.utc(
+                    final now = DateFormatter.toJst(DateTime.now());
+                    final timestamp = DateFormatter.toUtc(DateTime(
                       selectedDate.year,
                       selectedDate.month,
                       selectedDate.day,
-                      now.hour - 9, // JSTからUTCに変換
+                      now.hour,
                       now.minute,
-                    );
+                    ));
                     onSave(TrainingRecord(
                       timestamp: timestamp,
                       repetitions: repetitions,
