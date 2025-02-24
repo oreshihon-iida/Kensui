@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/daily_total_model.dart';
 import '../models/workout_model.dart';
-import '../models/training_record.dart';
 import '../services/workout_service.dart';
 import '../services/user_profile_service.dart';
 import '../widgets/graph/workout_graph.dart';
