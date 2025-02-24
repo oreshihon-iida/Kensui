@@ -5,7 +5,8 @@ import 'scrollable_dialog_content.dart';
 String formatTimeJst(DateTime utcTime) {
   // Convert UTC to JST by adding 9 hours
   final jstHour = (utcTime.hour + 9) % 24;
-  return '${jstHour.toString().padLeft(2, '0')}:${utcTime.minute.toString().padLeft(2, '0')}';
+  final jstMinute = utcTime.minute;
+  return '${jstHour.toString().padLeft(2, '0')}:${jstMinute.toString().padLeft(2, '0')}';
 }
 
 class TrainingRecordDialog extends StatelessWidget {
@@ -97,8 +98,9 @@ class TrainingRecordDialog extends StatelessWidget {
                   final repetitions = int.tryParse(repetitionsController.text);
                   if (repetitions != null && repetitions >= 0) {
                     // Use the selected date for the timestamp (it's already in UTC)
+                    final timestamp = selectedDate;
                     onSave(TrainingRecord(
-                      timestamp: selectedDate,
+                      timestamp: timestamp,
                       repetitions: repetitions,
                     ));
                     Navigator.pop(context);
