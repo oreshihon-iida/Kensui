@@ -45,11 +45,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
     );
   }
 
-  void _handleSaveRecord(TrainingRecord record) {
-    // TODO: 保存処理の実装
+  void _handleSaveRecord(TrainingRecord record) async {
+    final storageService = StorageService(await SharedPreferences.getInstance());
+    await storageService.saveRecord(record);
+    
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text('${record.repetitions}回を記録しました')),
     );
+    
+    // 保存後にダイアログを再表示して履歴を更新
+    _showTrainingRecordDialog(record.timestamp);
   }
 
   @override
