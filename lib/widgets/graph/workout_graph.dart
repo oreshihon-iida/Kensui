@@ -69,15 +69,17 @@ class WorkoutGraph extends StatelessWidget {
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
                 if (index >= 0 && index < dailyTotals.length) {
-                  // 日付順（新しい順）にソート
+                  // 日付順（古い順）にソート
                   final sortedTotals = List<DailyTotalModel>.from(dailyTotals)
-                    ..sort((a, b) => b.date.compareTo(a.date));
-                  final date = sortedTotals[index].date;
+                    ..sort((a, b) => a.date.compareTo(b.date));
+                  // インデックスを反転（新しい日付が右側に表示）
+                  final reversedIndex = sortedTotals.length - 1 - index;
+                  final date = sortedTotals[reversedIndex].date;
                   
                   // 日付の重複を避けるため、前の日付と比較
                   if (index == 0 || index == sortedTotals.length - 1 ||
-                      (index > 0 && (sortedTotals[index - 1].date.day != date.day ||
-                                   sortedTotals[index - 1].date.month != date.month))) {
+                      (reversedIndex > 0 && (sortedTotals[reversedIndex - 1].date.day != date.day ||
+                                   sortedTotals[reversedIndex - 1].date.month != date.month))) {
                     return Text(
                       '${date.month}/${date.day}',
                       style: const TextStyle(fontSize: 10),
@@ -130,7 +132,7 @@ class WorkoutGraph extends StatelessWidget {
                       .toDouble(),
             );
       // X軸の値を反転（新しい日付が右側に表示）
-      return FlSpot((sortedTotals.length - 1 - index).toDouble(), y);
+      return FlSpot(index.toDouble(), y);
     });
   }
 
