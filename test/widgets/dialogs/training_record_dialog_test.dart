@@ -5,7 +5,7 @@ import 'package:kensui/models/training_record.dart';
 
 void main() {
   testWidgets('TrainingRecordDialog handles long record lists', (WidgetTester tester) async {
-    final now = DateTime.now();
+    final now = DateTime(2025, 2, 24, 4, 42); // Fixed timestamp for test
     final records = List.generate(50, (i) => TrainingRecord(
       timestamp: now.subtract(Duration(minutes: i)),
       repetitions: 10 + i,
