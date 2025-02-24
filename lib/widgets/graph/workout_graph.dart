@@ -96,7 +96,7 @@ class WorkoutGraph extends StatelessWidget {
   }
 
   List<FlSpot> _createDataPoints() {
-    return List.generate(dailyTotals.length, (index) {
+    final points = List.generate(dailyTotals.length, (index) {
       final total = dailyTotals[index];
       final y = graphType == GraphType.count
           ? total.totalCount.toDouble()
@@ -107,8 +107,9 @@ class WorkoutGraph extends StatelessWidget {
                   (workout.count * (bodyWeight! + (workout.weightAdded ?? 0)))
                       .toDouble(),
             );
-      return FlSpot(index.toDouble(), y);
+      return FlSpot((dailyTotals.length - 1 - index).toDouble(), y);
     });
+    return points;
   }
 
   double _calculateInterval() {
