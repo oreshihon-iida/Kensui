@@ -101,7 +101,7 @@ class WorkoutGraph extends StatelessWidget {
                       .toDouble(),
             );
       return FlSpot(index.toDouble(), y);
-    }).reversed.toList();
+    });
   }
 
   double _calculateInterval() {
@@ -123,6 +123,6 @@ class WorkoutGraph extends StatelessWidget {
     if (maxValue <= 20) return 5;
     if (maxValue <= 50) return 10;
     if (maxValue <= 100) return 20;
-    return (maxValue / 5).ceil().toDouble();
+    return (maxValue / 10).ceil() * 10.0;
   }
 }
