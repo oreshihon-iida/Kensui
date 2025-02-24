@@ -104,8 +104,8 @@ class TrainingRecordDialog extends StatelessWidget {
                       selectedDate.year,
                       selectedDate.month,
                       selectedDate.day,
-                      now.hour,
-                      now.minute,
+                      jst.hour,
+                      jst.minute,
                     );
                     onSave(TrainingRecord(
                       timestamp: timestamp,
