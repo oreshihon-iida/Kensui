@@ -64,13 +64,21 @@ class WorkoutGraph extends StatelessWidget {
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
+              reservedSize: 30,
+              interval: 1,
               getTitlesWidget: (value, meta) {
-                if (value.toInt() >= 0 && value.toInt() < dailyTotals.length) {
-                  final index = dailyTotals.length - 1 - value.toInt();
-                  final date = dailyTotals[index].date;
+                final index = value.toInt();
+                if (index >= 0 && index < dailyTotals.length) {
+                  final currentDate = dailyTotals[dailyTotals.length - 1 - index].date;
+                  if (index > 0) {
+                    final prevDate = dailyTotals[dailyTotals.length - index].date;
+                    if (prevDate.day == currentDate.day && prevDate.month == currentDate.month) {
+                      return const Text('');
+                    }
+                  }
                   return Text(
-                    '${date.month}/${date.day}',
-                    style: const TextStyle(fontSize: 12),
+                    '${currentDate.month}/${currentDate.day}',
+                    style: const TextStyle(fontSize: 10),
                   );
                 }
                 return const Text('');
