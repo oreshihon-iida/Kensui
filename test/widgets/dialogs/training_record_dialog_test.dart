@@ -5,7 +5,7 @@ import 'package:kensui/models/training_record.dart';
 
 void main() {
   testWidgets('TrainingRecordDialog handles long record lists', (WidgetTester tester) async {
-    final now = DateTime(2025, 2, 24, 4, 42); // Fixed timestamp
+    final now = DateTime.utc(2025, 2, 24, 4, 42); // Fixed UTC timestamp
     final records = List.generate(50, (i) => TrainingRecord(
       timestamp: now.subtract(Duration(minutes: i)),
       repetitions: 10,
@@ -25,35 +25,19 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    // Verify first record is visible
-    expect(find.text('04:42 10回'), findsOneWidget);
+    // Verify first record is visible with JST time (UTC 04:42 -> JST 13:42)
+    expect(find.text('13:42 10回'), findsOneWidget);
 
     // Verify scrolling works
     await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -500));
     await tester.pumpAndSettle();
 
-    // Verify last record is visible
-    final lastRecord = records.last;
-    final lastTime = '${lastRecord.timestamp.hour.toString().padLeft(2, '0')}:${lastRecord.timestamp.minute.toString().padLeft(2, '0')}';
-    expect(find.text('$lastTime ${lastRecord.repetitions}回'), findsOneWidget);
-
-    await tester.pumpAndSettle();
-
-    // Verify first record is visible
-    expect(find.text('04:42 10回'), findsOneWidget);
-
-    // Verify scrolling works
-    await tester.drag(find.byType(SingleChildScrollView), const Offset(0, -500));
-    await tester.pumpAndSettle();
-
-    // Verify last record is visible
-    final lastRecord = records.last;
-    final lastTime = '${lastRecord.timestamp.hour.toString().padLeft(2, '0')}:${lastRecord.timestamp.minute.toString().padLeft(2, '0')}';
-    expect(find.text('$lastTime ${lastRecord.repetitions}回'), findsOneWidget);
+    // Verify last record is visible with JST time (UTC 03:52 -> JST 12:52)
+    expect(find.text('12:52 10回'), findsOneWidget);
   });
 
   testWidgets('TrainingRecordDialog shows empty state message', (WidgetTester tester) async {
-    final now = DateTime(2025, 2, 24, 4, 42); // Fixed timestamp
+    final now = DateTime.utc(2025, 2, 24, 4, 42); // Fixed UTC timestamp
     await tester.pumpWidget(MaterialApp(
       home: Builder(
         builder: (context) => TrainingRecordDialog(
@@ -70,7 +54,7 @@ void main() {
   });
 
   testWidgets('TrainingRecordDialog saves record with current time', (WidgetTester tester) async {
-    final now = DateTime(2025, 2, 24, 4, 42); // Fixed timestamp
+    final now = DateTime.utc(2025, 2, 24, 4, 42); // Fixed UTC timestamp
     DateTime? savedTimestamp;
     int? savedRepetitions;
 
@@ -96,9 +80,9 @@ void main() {
     await tester.tap(find.text('保存'));
     await tester.pumpAndSettle();
 
-    // Verify record was saved with current time
+    // Verify record was saved with JST time
     expect(savedRepetitions, equals(50));
-    expect(savedTimestamp?.hour, equals(now.hour));
-    expect(savedTimestamp?.minute, equals(42)); // Fixed timestamp from test setup
+    expect(savedTimestamp?.hour, equals(13)); // UTC 4:42 -> JST 13:42
+    expect(savedTimestamp?.minute, equals(42));
   });
 }

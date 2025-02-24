@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import '../../models/training_record.dart';
 import 'scrollable_dialog_content.dart';
 
+String formatTimeJst(DateTime utcTime) {
+  final jst = utcTime.toUtc().add(const Duration(hours: 9));
+  return '${jst.hour.toString().padLeft(2, '0')}:${jst.minute.toString().padLeft(2, '0')}';
+}
+
 class TrainingRecordDialog extends StatelessWidget {
   final DateTime selectedDate;
   final TrainingRecord? record;
@@ -68,7 +73,7 @@ class TrainingRecordDialog extends StatelessWidget {
               separatorBuilder: (_, __) => const Divider(),
               itemBuilder: (context, index) {
                 final record = dayRecords[index];
-                final time = '${record.timestamp.hour.toString().padLeft(2, '0')}:${record.timestamp.minute.toString().padLeft(2, '0')}';
+                final time = formatTimeJst(record.timestamp);
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
@@ -91,12 +96,13 @@ class TrainingRecordDialog extends StatelessWidget {
                   final repetitions = int.tryParse(repetitionsController.text);
                   if (repetitions != null && repetitions >= 0) {
                     final now = DateTime.now();
+                    final jst = now.toUtc().add(const Duration(hours: 9)); // Convert to JST
                     final timestamp = DateTime(
                       selectedDate.year,
                       selectedDate.month,
                       selectedDate.day,
-                      now.hour,
-                      now.minute,
+                      jst.hour,
+                      jst.minute,
                     );
                     onSave(TrainingRecord(
                       timestamp: timestamp,

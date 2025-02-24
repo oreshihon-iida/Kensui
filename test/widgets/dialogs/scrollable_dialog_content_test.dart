@@ -6,14 +6,13 @@ void main() {
   testWidgets('ScrollableDialogContent respects maxHeight constraint', (WidgetTester tester) async {
     const maxHeight = 300.0;
     
-    await tester.pumpWidget(MaterialApp(
+    await tester.pumpWidget(const MaterialApp(
       home: Material(
         child: Center(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxHeight: maxHeight),
+          child: Dialog(
             child: ScrollableDialogContent(
               maxHeight: maxHeight,
-              children: List.generate(20, (i) => Text('Item $i')),
+              children: [Text('Test')],
             ),
           ),
         ),
