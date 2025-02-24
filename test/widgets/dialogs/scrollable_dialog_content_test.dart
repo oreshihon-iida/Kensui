@@ -9,8 +9,8 @@ void main() {
     await tester.pumpWidget(MaterialApp(
       home: Material(
         child: Center(
-          child: SizedBox(
-            height: maxHeight,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxHeight: maxHeight),
             child: ScrollableDialogContent(
               maxHeight: maxHeight,
               children: List.generate(20, (i) => Text('Item $i')),
