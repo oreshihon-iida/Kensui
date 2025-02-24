@@ -20,10 +20,17 @@ class WorkoutService {
   Future<List<WorkoutModel>> getWorkouts() async {
     final workoutsJson = _prefs.getStringList(_workoutsKey) ?? [];
     print('Debug: Found ${workoutsJson.length} workouts in SharedPreferences');
-    final workouts = workoutsJson
-        .map((json) => WorkoutModel.fromJson(jsonDecode(json)))
-        .toList();
-    print('Debug: Parsed ${workouts.length} valid workout records');
+    
+    try {
+      final workouts = workoutsJson
+          .map((json) => WorkoutModel.fromJson(jsonDecode(json)))
+          .toList();
+      print('Debug: Parsed ${workouts.length} valid workout records');
+      return workouts;
+    } catch (e) {
+      print('Error parsing workouts: $e');
+      return []; // エラー時は空のリストを返す
+    }
   }
 
   // 指定期間のワークアウトを取得
@@ -59,7 +66,7 @@ class WorkoutService {
     final dailyTotals = workoutsByDate.entries
         .map((e) => DailyTotalModel(date: e.key, workouts: e.value))
         .toList()
-        ..sort((a, b) => a.date.compareTo(b.date));
+      ..sort((a, b) => a.date.compareTo(b.date));
     print('Debug: Generated ${dailyTotals.length} daily total records');
     return dailyTotals;
   }
