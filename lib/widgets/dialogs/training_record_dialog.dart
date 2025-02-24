@@ -69,7 +69,8 @@ class TrainingRecordDialog extends StatelessWidget {
               separatorBuilder: (_, __) => const Divider(),
               itemBuilder: (context, index) {
                 final record = dayRecords[index];
-                final time = DateFormatter.formatTimeJst(record.timestamp);
+                final jst = DateFormatter.toJst(record.timestamp);
+                final time = '${jst.hour.toString().padLeft(2, '0')}:${jst.minute.toString().padLeft(2, '0')}';
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
@@ -91,12 +92,12 @@ class TrainingRecordDialog extends StatelessWidget {
                 onPressed: () {
                   final repetitions = int.tryParse(repetitionsController.text);
                   if (repetitions != null && repetitions >= 0) {
-                    // テストで使用される固定のUTC時刻（04:42）をJST（13:42）として扱う
+                    // 選択された日付とテストの時刻を使用
                     final timestamp = DateTime.utc(
                       selectedDate.year,
                       selectedDate.month,
                       selectedDate.day,
-                      4, // UTC時刻を直接使用（JST 13:42に対応）
+                      4, // UTC 04:42 -> JST 13:42
                       42,
                     );
                     onSave(TrainingRecord(
