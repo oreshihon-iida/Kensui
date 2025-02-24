@@ -2,17 +2,9 @@ import 'package:flutter/material.dart';
 import '../../models/training_record.dart';
 import 'scrollable_dialog_content.dart';
 
-DateTime toJst(DateTime utcTime) {
-  return utcTime.add(const Duration(hours: 9));
-}
-
-DateTime toUtc(DateTime jstTime) {
-  return jstTime.subtract(const Duration(hours: 9));
-}
-
 String formatTimeJst(DateTime utcTime) {
-  final jst = toJst(utcTime);
-  return '${jst.hour.toString().padLeft(2, '0')}:${jst.minute.toString().padLeft(2, '0')}';
+  final jstHour = (utcTime.hour + 9) % 24;
+  return '${jstHour.toString().padLeft(2, '0')}:${utcTime.minute.toString().padLeft(2, '0')}';
 }
 
 class TrainingRecordDialog extends StatelessWidget {
@@ -105,14 +97,13 @@ class TrainingRecordDialog extends StatelessWidget {
                   if (repetitions != null && repetitions >= 0) {
                     // Get current time in JST
                     final jstNow = DateTime.now();
-                    // Convert JST to UTC for storage, handling day boundaries
-                    final utcHour = jstNow.hour - 9;
-                    final utcDay = utcHour < 0 ? selectedDate.day - 1 : selectedDate.day;
+                    // Convert JST to UTC for storage
+                    final utcHour = (jstNow.hour - 9 + 24) % 24;
                     final timestamp = DateTime.utc(
                       selectedDate.year,
                       selectedDate.month,
-                      utcDay,
-                      utcHour < 0 ? utcHour + 24 : utcHour,
+                      selectedDate.day,
+                      utcHour,
                       jstNow.minute,
                     );
                     onSave(TrainingRecord(
