@@ -65,7 +65,7 @@ class WorkoutGraph extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 30,
-              interval: 1,
+              interval: 2, // 日付の表示間隔を調整
               getTitlesWidget: (value, meta) {
                 final index = value.toInt();
                 if (index >= 0 && index < dailyTotals.length) {
@@ -85,7 +85,6 @@ class WorkoutGraph extends StatelessWidget {
                 }
                 return const Text('');
               },
-              interval: 2, // 日付の表示間隔を調整
             ),
           ),
           rightTitles: const AxisTitles(
