@@ -34,13 +34,24 @@ class _HomeScreenState extends State<HomeScreen> {
     _workoutService = WorkoutService(prefs);
     _userProfileService = UserProfileService(prefs);
     _bodyWeight = _userProfileService.getBodyWeight();
+    
+    // テストデータの追加（開発用）
+    final testWorkout = WorkoutModel(
+      date: DateTime.utc(2025, 2, 24, 4, 42), // UTC 04:42 -> JST 13:42
+      count: 10,
+      goalCount: 15,
+    );
+    await _workoutService.saveWorkout(testWorkout);
+    
     await _loadDailyTotals();
   }
 
   Future<void> _loadDailyTotals() async {
     if (mounted) {
+      print('Debug: Loading daily totals for period: $_selectedPeriod');
       setState(() => _isLoading = true);
       final dailyTotals = await _workoutService.getDailyTotals(_selectedPeriod);
+      print('Debug: Loaded ${dailyTotals.length} daily totals');
       if (mounted) {
         setState(() {
           _dailyTotals = dailyTotals;

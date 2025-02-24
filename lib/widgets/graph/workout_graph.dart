@@ -140,6 +140,7 @@ class WorkoutGraph extends StatelessWidget {
   List<FlSpot> _createDataPoints() {
     // 日付でソート（古い順）
     final sortedTotals = _filterDataByPeriod();
+    print('Debug: Creating ${sortedTotals.length} data points for graph');
     
     return List.generate(sortedTotals.length, (index) {
       final total = sortedTotals[index];
@@ -162,6 +163,7 @@ class WorkoutGraph extends StatelessWidget {
     // JSTでの現在時刻を取得
     final now = DateTime.now().add(const Duration(hours: 9));
     final filteredData = List<DailyTotalModel>.from(dailyTotals);
+    print('Debug: Filtering ${dailyTotals.length} daily totals for period: $selectedPeriod');
     
     // 期間に応じてデータをフィルタリング
     switch (selectedPeriod) {
