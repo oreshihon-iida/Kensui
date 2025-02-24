@@ -62,9 +62,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     setState(() => _isLoading = true);
-    await _workoutService.saveWorkout(workout);
-    _repetitionsController.clear();
-    await _loadDailyTotals(); // Ensure graph updates
+    try {
+      await _workoutService.saveWorkout(workout);
+      _repetitionsController.clear();
+      await _loadDailyTotals(); // Ensure graph updates
+    } finally {
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
