@@ -31,13 +31,19 @@ class WorkoutGraph extends StatelessWidget {
       return const Center(child: Text('体重データが必要です'));
     }
 
+    final sortedTotals = _filterDataByPeriod();
+    final minX = sortedTotals.first.date.millisecondsSinceEpoch.toDouble() / (24 * 60 * 60 * 1000);
+    final maxX = sortedTotals.last.date.millisecondsSinceEpoch.toDouble() / (24 * 60 * 60 * 1000);
+
     return LineChart(
       LineChartData(
+        minX: minX,
+        maxX: maxX,
         gridData: FlGridData(
           show: true,
           drawVerticalLine: true,
           horizontalInterval: _calculateInterval(),
-          verticalInterval: 1,
+          verticalInterval: 7, // 週単位で表示
           getDrawingHorizontalLine: (value) {
             return FlLine(
               color: Colors.grey.withAlpha(76),
@@ -69,16 +75,14 @@ class WorkoutGraph extends StatelessWidget {
               reservedSize: 30,
               interval: 7, // 週単位で表示
               getTitlesWidget: (value, meta) {
-                final index = value.toInt();
-                final filteredData = _filterDataByPeriod();
-                if (index >= 0 && index < filteredData.length) {
-                  final date = filteredData[index].date;
-                  return Text(
-                    '${date.month.toString().padLeft(2, '0')}/${date.day.toString().padLeft(2, '0')}',
-                    style: const TextStyle(fontSize: 10),
-                  );
-                }
-                return const Text('');
+                // Convert double back to DateTime
+                final date = DateTime.fromMillisecondsSinceEpoch(
+                  (value * 24 * 60 * 60 * 1000).toInt(),
+                );
+                return Text(
+                  '${date.month.toString().padLeft(2, '0')}/${date.day.toString().padLeft(2, '0')}',
+                  style: const TextStyle(fontSize: 10),
+                );
               },
             ),
           ),
@@ -113,6 +117,8 @@ class WorkoutGraph extends StatelessWidget {
     
     return List.generate(sortedTotals.length, (index) {
       final total = sortedTotals[index];
+      // Convert date to double (days since epoch) for X-axis
+      final x = total.date.millisecondsSinceEpoch.toDouble() / (24 * 60 * 60 * 1000);
       final y = graphType == GraphType.count
           ? total.totalCount.toDouble()
           : total.workouts.fold<double>(
@@ -122,8 +128,7 @@ class WorkoutGraph extends StatelessWidget {
                   (workout.count * (bodyWeight! + (workout.weightAdded ?? 0)))
                       .toDouble(),
             );
-      return FlSpot(index.toDouble(), y);
-    });
+      return FlSpot(x, y);
   }
 
   List<DailyTotalModel> _filterDataByPeriod() {
