@@ -76,7 +76,7 @@ class WorkoutGraph extends StatelessWidget {
                   final weekday = date.weekday;
                   if (weekday == DateTime.monday || index == filteredData.length - 1) {
                     return Text(
-                      '${date.month}/${date.day}',
+                      '${date.month.toString().padLeft(2, '0')}/${date.day.toString().padLeft(2, '0')}',
                       style: const TextStyle(fontSize: 10),
                     );
                   }
