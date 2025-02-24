@@ -74,16 +74,19 @@ class WorkoutGraph extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 30,
-              interval: 7, // 週単位で表示
+              interval: (maxX - minX) / 7, // 週単位で表示
               getTitlesWidget: (value, meta) {
                 // Convert double back to DateTime
                 final date = DateTime.fromMillisecondsSinceEpoch(
                   (value * 24 * 60 * 60 * 1000).toInt(),
                 );
-                return Text(
-                  '${date.month.toString().padLeft(2, '0')}/${date.day.toString().padLeft(2, '0')}',
-                  style: const TextStyle(fontSize: 10),
-                );
+                if (date.weekday == DateTime.monday || date == sortedTotals.first.date || date == sortedTotals.last.date) {
+                  return Text(
+                    '${date.month.toString().padLeft(2, '0')}/${date.day.toString().padLeft(2, '0')}',
+                    style: const TextStyle(fontSize: 10),
+                  );
+                }
+                return const Text('');
               },
             ),
           ),
